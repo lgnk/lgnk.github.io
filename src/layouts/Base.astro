@@ -52,9 +52,10 @@ const jsonLd = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="LGNK Sistemas — Sistemas que aguentam o dia a dia." />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-sans" preload={[{ weight: 400 }, { weight: 700 }]} />
     <Font cssVariable="--font-serif" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

@@ -18,6 +18,9 @@ describe('layout da home', () => {
   it('tem canonical e imagem de compartilhamento absolutas', () => {
     expect(doc.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://lgnk.com.br/');
     expect(doc.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe('https://lgnk.com.br/og.png');
+    expect(doc.querySelector('meta[property="og:image:alt"]')?.getAttribute('content')).toBe(
+      'LGNK Sistemas — Sistemas que aguentam o dia a dia.',
+    );
   });
 
   it('tem dados estruturados com o CNPJ', () => {
@@ -33,7 +36,9 @@ describe('layout da home', () => {
     }
     expect(footer?.querySelector('a[href="mailto:contato@lgnk.com.br"]')).not.toBeNull();
     expect(footer?.querySelector('a[href="/privacidade/"]')).not.toBeNull();
-    expect(text(footer?.querySelector('button[data-open-consent]'))).toBe('Preferências de cookies');
+    const prefs = footer?.querySelector('button[data-open-consent]');
+    expect(text(prefs)).toBe('Preferências de cookies');
+    expect(prefs?.hasAttribute('hidden')).toBe(true); // só aparece com JavaScript e Clarity configurado
   });
 
   it('rodapé não mostra Instagram enquanto ele não existe', () => {

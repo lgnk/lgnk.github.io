@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { page, text } from './helpers';
+import { cases } from '../../src/data/cases';
 
 const NAMES = ['Beerpass Club', 'Avance Trainer', 'InkaBoxe', 'Pedro Porto Studios', 'Silver Schuffner'];
 const UNLINKED = ['InkaBoxe', 'Silver Schuffner'];
@@ -27,6 +28,8 @@ describe('seção Trabalhos', () => {
         expect(links.length).toBe(1);
         expect(links[0].getAttribute('target')).toBe('_blank');
         expect(links[0].getAttribute('rel')).toContain('noopener');
+        const c = cases.find((x) => x.name === name)!;
+        expect(links[0].getAttribute('aria-label')).toBe(`${c.name}: ${c.summary} (abre em nova aba)`);
       }
     }
   });

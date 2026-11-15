@@ -21,6 +21,7 @@ test('funciona sem JavaScript', async ({ browser }) => {
   expect(hrefs.length).toBeGreaterThanOrEqual(2);
   for (const h of hrefs) expect(h).toMatch(/^https:\/\/wa\.me\//);
   await expect(page.locator('#consent')).toBeHidden();
+  await expect(page.locator('[data-open-consent]')).toBeHidden();
   await context.close();
 });
 

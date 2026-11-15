@@ -46,9 +46,9 @@ export const cases: Case[] = [
   {
     slug: 'pedro-porto',
     name: 'Pedro Porto Studios',
-    summary: 'Loja de roupas sob demanda com Pix, cartão e frete automático',
-    tags: ['Loja virtual'],
-    href: 'https://shop.pedroportodesign.online',
+    summary: 'Portfólio do designer refeito em código e loja de roupas sob demanda com Pix, cartão e frete',
+    tags: ['Portfólio', 'Loja virtual'],
+    href: 'https://pedroportodesign.online',
     image: pedroPorto,
     imageAlt: 'Portfólio do designer Pedro Porto reconstruído em código',
   },

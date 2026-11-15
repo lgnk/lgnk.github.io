@@ -25,17 +25,29 @@ function startClarity() {
   window.clarity?.('consentv2', ANALYTICS_ONLY);
 }
 
-function show(focus = false) {
+let opener: HTMLElement | null = null;
+
+/** Reserva embaixo da página o espaço que o banner ocupa, para ele não cobrir conteúdo nem o foco. */
+function syncSpace() {
+  const height = banner && !banner.hidden ? banner.offsetHeight : 0;
+  document.body.style.paddingBottom = height ? `${height}px` : '';
+  document.documentElement.style.scrollPaddingBottom = height ? `${height}px` : '';
+}
+
+function show(from: HTMLElement | null = null) {
   if (!banner) return;
   banner.hidden = false;
-  document.body.style.paddingBottom = `${banner.offsetHeight}px`;
-  if (focus) banner.querySelector<HTMLButtonElement>('button[data-consent]')?.focus();
+  syncSpace();
+  opener = from;
+  if (from) banner.querySelector<HTMLButtonElement>('button[data-consent]')?.focus();
 }
 
 function hide() {
   if (!banner) return;
   banner.hidden = true;
-  document.body.style.paddingBottom = '';
+  syncSpace();
+  opener?.focus();
+  opener = null;
 }
 
 function choose(value: Consent) {
@@ -46,16 +58,21 @@ function choose(value: Consent) {
   hide();
 }
 
-const current = readConsent(storage());
-if (current === null) show();
-else if (current === 'granted') startClarity();
+// Sem Clarity configurado não há o que consentir: banner e "Preferências de cookies" ficam escondidos.
+if (clarityId) {
+  document.querySelectorAll<HTMLElement>('[data-open-consent]').forEach((button) => (button.hidden = false));
+  if (banner && 'ResizeObserver' in window) new ResizeObserver(syncSpace).observe(banner);
+  const current = readConsent(storage());
+  if (current === null) show();
+  else if (current === 'granted') startClarity();
+}
 
 banner?.querySelectorAll<HTMLButtonElement>('button[data-consent]').forEach((button) => {
   button.addEventListener('click', () => choose(button.dataset.consent as Consent));
 });
 
-document.querySelectorAll('[data-open-consent]').forEach((button) => {
-  button.addEventListener('click', () => show(true));
+document.querySelectorAll<HTMLElement>('[data-open-consent]').forEach((button) => {
+  button.addEventListener('click', () => show(button));
 });
 
 document.addEventListener('click', (event) => {

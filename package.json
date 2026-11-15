@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "typecheck": "tsc --noEmit",
     "test:unit": "vitest run tests/unit",
     "test:build": "astro build && vitest run tests/build",
     "test:e2e": "astro build && playwright test",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",
+    "@types/node": "24",
     "linkedom": "^0.18.15",
     "typescript": "^7.0.2",
     "vitest": "^5.1.0"
