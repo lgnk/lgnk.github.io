@@ -1,8 +1,9 @@
 import { readConsent, writeConsent, type Consent } from '../lib/consent';
+import { loadClarity, ANALYTICS_ONLY } from '../lib/clarity';
 
 declare global {
   interface Window {
-    clarity?: (...args: unknown[]) => void;
+    clarity?: ((...args: unknown[]) => void) & { q?: unknown[][] };
   }
 }
 
@@ -14,7 +15,15 @@ function storage(): Storage | null {
   }
 }
 
+const clarityId = document.documentElement.dataset.clarityId ?? '';
 const banner = document.getElementById('consent');
+
+/** O Clarity só entra na página depois do "Aceitar" (e só para análise). */
+function startClarity() {
+  if (!clarityId) return;
+  loadClarity(window, document, clarityId);
+  window.clarity?.('consentv2', ANALYTICS_ONLY);
+}
 
 function show(focus = false) {
   if (!banner) return;
@@ -31,14 +40,15 @@ function hide() {
 
 function choose(value: Consent) {
   writeConsent(storage(), value);
-  if (value === 'granted') window.clarity?.('consent');
+  if (value === 'granted') startClarity();
+  // Se o Clarity já tinha sido carregado nesta visita, apaga os cookies dele.
   else window.clarity?.('consent', false);
   hide();
 }
 
 const current = readConsent(storage());
 if (current === null) show();
-else if (current === 'granted') window.clarity?.('consent');
+else if (current === 'granted') startClarity();
 
 banner?.querySelectorAll<HTMLButtonElement>('button[data-consent]').forEach((button) => {
   button.addEventListener('click', () => choose(button.dataset.consent as Consent));

@@ -1,36 +1,54 @@
-import { test, expect, calls } from './fixtures';
+import { test, expect, calls, CLARITY_TAG } from './fixtures';
 
-test('banner aparece na primeira visita e some ao aceitar', async ({ page }) => {
-  await page.goto('/');
-  const banner = page.locator('#consent');
-  await expect(banner).toBeVisible();
-  await banner.getByRole('button', { name: 'Aceitar' }).click();
-  await expect(banner).toBeHidden();
-  expect(await page.evaluate(() => localStorage.getItem('lgnk-consent'))).toBe('granted');
-  expect(await calls(page)).toContainEqual(['consent']);
+const ANALYTICS_ONLY = ['consentv2', { ad_Storage: 'denied', analytics_Storage: 'granted' }];
 
-  await page.reload();
-  await expect(banner).toBeHidden();
-  expect(await calls(page)).toContainEqual(['consent']);
+test('nada do Clarity carrega antes da escolha', async ({ page, clarityRequests }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await expect(page.locator('#consent')).toBeVisible();
+  expect(clarityRequests).toEqual([]);
+  expect(await page.evaluate(() => typeof (window as any).clarity)).toBe('undefined');
 });
 
-test('recusar guarda a escolha', async ({ page }) => {
+test('aceitar carrega o Clarity só para análise', async ({ page, clarityRequests }) => {
+  await page.goto('/');
+  const banner = page.locator('#consent');
+  await banner.getByRole('button', { name: 'Aceitar' }).click();
+  await expect(banner).toBeHidden();
+  await expect.poll(() => clarityRequests).toContain(CLARITY_TAG);
+  expect(await calls(page)).toContainEqual(ANALYTICS_ONLY);
+  expect(await page.evaluate(() => localStorage.getItem('lgnk-consent'))).toBe('granted');
+
+  clarityRequests.length = 0;
+  await page.reload();
+  await expect(banner).toBeHidden();
+  await expect.poll(() => clarityRequests).toContain(CLARITY_TAG);
+  expect(await calls(page)).toContainEqual(ANALYTICS_ONLY);
+});
+
+test('recusar não carrega nada, nem depois', async ({ page, clarityRequests }) => {
   await page.goto('/');
   await page.locator('#consent').getByRole('button', { name: 'Recusar' }).click();
   await expect(page.locator('#consent')).toBeHidden();
   expect(await page.evaluate(() => localStorage.getItem('lgnk-consent'))).toBe('denied');
-  expect(await calls(page)).toContainEqual(['consent', false]);
+  await page.reload({ waitUntil: 'networkidle' });
+  await expect(page.locator('#consent')).toBeHidden();
+  expect(clarityRequests).toEqual([]);
 });
 
-test('preferências reabre o banner', async ({ page }) => {
+test('preferências reabre o banner e permite revogar', async ({ page }) => {
   await page.goto('/');
   await page.locator('#consent').getByRole('button', { name: 'Aceitar' }).click();
   await page.getByRole('button', { name: 'Preferências de cookies' }).click();
-  await expect(page.locator('#consent')).toBeVisible();
+  const banner = page.locator('#consent');
+  await expect(banner).toBeVisible();
+  await banner.getByRole('button', { name: 'Recusar' }).click();
+  expect(await page.evaluate(() => localStorage.getItem('lgnk-consent'))).toBe('denied');
+  expect(await calls(page)).toContainEqual(['consent', false]);
 });
 
-test('clique no WhatsApp vira evento', async ({ page }) => {
+test('clique no WhatsApp vira evento depois do aceite', async ({ page }) => {
   await page.goto('/');
+  await page.locator('#consent').getByRole('button', { name: 'Aceitar' }).click();
   await page.locator('#topo a[data-whatsapp]').click();
   await expect.poll(() => calls(page)).toContainEqual(['event', 'whatsapp_click']);
 });

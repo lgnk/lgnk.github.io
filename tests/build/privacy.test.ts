@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { page, allHtml, text } from './helpers';
+import { site } from '../../src/config';
 
 describe('política de privacidade', () => {
   const doc = page('/privacidade/');
@@ -12,6 +13,18 @@ describe('política de privacidade', () => {
     }
     expect(doc.querySelector('main a[href="/"]')).not.toBeNull();
     expect(doc.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://lgnk.com.br/privacidade/');
+  });
+
+  it('diz que o Clarity só carrega depois do aceite e aponta a política da Microsoft', () => {
+    const body = text(doc.querySelector('main'));
+    expect(body).toContain('O Clarity só é carregado depois que você toca em “Aceitar”.');
+    expect(doc.querySelector('main a[href="https://www.microsoft.com/pt-br/privacy/privacystatement"]')).not.toBeNull();
+  });
+
+  it('não faz promessas que não foram confirmadas', () => {
+    const body = text(doc.querySelector('main'));
+    expect(body).not.toContain('Não vendemos');
+    expect(body).not.toContain('só para responder');
   });
 });
 
@@ -28,7 +41,13 @@ describe('banner de cookies', () => {
     expect(banner!.querySelector('a[href="/privacidade/"]')).not.toBeNull();
   });
 
-  it('não carrega o Clarity enquanto não houver ID', () => {
-    for (const html of allHtml()) expect(html).not.toContain('clarity.ms');
+  it('marca o ID do Clarity no HTML só quando ele existe', () => {
+    const attr = doc.documentElement.getAttribute('data-clarity-id');
+    if (site.clarityId) expect(attr).toBe(site.clarityId);
+    else expect(attr).toBeNull();
+  });
+
+  it('nunca traz a tag do Clarity pronta no HTML (ela só entra depois do aceite)', () => {
+    for (const html of allHtml()) expect(html).not.toMatch(/<script[^>]*src="https:\/\/www\.clarity\.ms/);
   });
 });
