@@ -27,6 +27,6 @@ export const site: SiteConfig = {
   // Só dígitos: 55 + DDD + número. O build de produção recusa o número fictício.
   whatsapp: { number: '5533988429751', message: 'Olá! Vim pelo site da LGNK.' },
   // ID do projeto no Microsoft Clarity. Vazio = analytics desligado.
-  clarityId: '',
+  clarityId: 'ze9fnfo6pb',
   sitePriceFrom: 'R$ 2.000',
 };

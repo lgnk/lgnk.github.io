@@ -17,17 +17,26 @@ export const test = base.extend<{ clarityRequests: string[] }>({
       clarityRequests.push(r.request().url());
       return r.fulfill({ status: 200, contentType: 'application/javascript', body: '' });
     });
-    await page.route('http://localhost:4322/**', async (route) => {
-      if (route.request().resourceType() !== 'document') return route.continue();
-      const response = await route.fetch();
-      const body = (await response.text()).replace('<html lang="pt-BR"', `<html lang="pt-BR" data-clarity-id="${TEST_CLARITY_ID}"`);
-      return route.fulfill({ response, body });
-    });
+    await serveWithClarityId(page, TEST_CLARITY_ID);
     await use(page);
   },
 });
 
 export { expect };
+
+/**
+ * Reescreve o `<html>` de cada página servida: com `id`, o site age como se esse fosse o ID do Clarity;
+ * com `null`, como se o site não tivesse ID. Independe do `clarityId` real em src/config.ts.
+ */
+export async function serveWithClarityId(page: Page, id: string | null) {
+  await page.route('http://localhost:4322/**', async (route) => {
+    if (route.request().resourceType() !== 'document') return route.continue();
+    const response = await route.fetch();
+    const attr = id ? ` data-clarity-id="${id}"` : '';
+    const body = (await response.text()).replace(/<html lang="pt-BR"[^>]*>/, `<html lang="pt-BR"${attr}>`);
+    return route.fulfill({ response, body });
+  });
+}
 
 /** Chamadas que ficaram na fila do Clarity (o script real não roda nos testes). */
 export const calls = (page: Page) => page.evaluate(() => ((window as any).clarity?.q ?? []) as unknown[][]);

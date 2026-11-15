@@ -1,7 +1,8 @@
 import { test as plain } from '@playwright/test';
-import { test, expect } from './fixtures';
+import { test, expect, serveWithClarityId } from './fixtures';
 
 plain('sem ID do Clarity, não pede consentimento', async ({ page }) => {
+  await serveWithClarityId(page, null);
   await page.goto('/');
   await expect(page.locator('h1')).toBeVisible();
   await expect(page.locator('#consent')).toBeHidden();
