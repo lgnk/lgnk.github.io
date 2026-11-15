@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import { cases } from '../data/cases';
+---
+
+<section id="trabalhos" class="section">
+  <div class="wrap">
+    <p class="eyebrow">Trabalhos</p>
+    <h2 class="section-title">O que a gente já construiu.</h2>
+    <ol class="work">
+      {
+        cases.map((c, i) => {
+          const body = (
+            <>
+              <div class="info">
+                <span class="num">{String(i + 1).padStart(2, '0')}</span>
+                <div class="text">
+                  <h3>{c.name}</h3>
+                  <p class="summary">{c.summary}</p>
+                  <p class="tags">
+                    {c.tags.map((t) => (
+                      <span>{t}</span>
+                    ))}
+                  </p>
+                </div>
+                {c.href && (
+                  <span class="arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                )}
+              </div>
+              <Image src={c.image} alt={c.imageAlt} width={640} loading="lazy" class="thumb" />
+            </>
+          );
+          return (
+            <li class="case">
+              {c.href ? (
+                <a class="row" href={c.href} target="_blank" rel="noopener noreferrer">
+                  {body}
+                  <span class="sr-only"> (abre em nova aba)</span>
+                </a>
+              ) : (
+                <div class="row">{body}</div>
+              )}
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .work { margin-top: 40px; border-top: 1px solid var(--ink); }
+  .case { border-bottom: 1px solid var(--ink); }
+  .row { display: grid; gap: 20px; padding: 24px 0; text-decoration: none; color: inherit; }
+  .info { display: grid; grid-template-columns: 2.4rem 1fr auto; gap: 12px; align-items: baseline; min-width: 0; }
+  .text { min-width: 0; }
+  h3 { font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; overflow-wrap: anywhere; }
+  .summary { color: var(--muted); margin-top: 6px; max-width: 46ch; overflow-wrap: anywhere; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tags span { border: 1px solid var(--ink); padding: 2px 8px; font-size: 13px; }
+  .arrow { font-size: 22px; }
+  .thumb { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid var(--ink); }
+  a.row:hover h3, a.row:hover .arrow { color: var(--accent); }
+  @media (min-width: 768px) {
+    .row { grid-template-columns: 1fr 34%; gap: 40px; align-items: center; padding: 28px 0; }
+  }
+</style>
