@@ -22,7 +22,7 @@ export const site: SiteConfig = {
   city: 'Belo Horizonte, MG',
   url: 'https://lgnk.com.br',
   // Marque ready: true quando contato@ estiver chegando no Gmail.
-  email: { address: 'contato@lgnk.com.br', ready: false },
+  email: { address: 'contato@lgnk.com.br', ready: true },
   instagram: null,
   // Só dígitos: 55 + DDD + número. O build de produção recusa o número fictício.
   whatsapp: { number: '5533988429751', message: 'Olá! Vim pelo site da LGNK.' },
