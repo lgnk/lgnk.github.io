@@ -1,7 +1,9 @@
 import { defineConfig, fontProviders } from 'astro/config';
+import { launchGuard } from './integrations/launch-guard';
 
 export default defineConfig({
   site: 'https://lgnk.com.br',
+  integrations: [launchGuard()],
   fonts: [
     {
       name: 'Inter Tight',
