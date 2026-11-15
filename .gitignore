@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.superpowers/
+.impeccable/
+docs/
+test-results/
+playwright-report/
+.DS_Store

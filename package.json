@@ -1,0 +1,23 @@
+{
+  "name": "lgnk-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test:unit": "vitest run tests/unit",
+    "test:build": "astro build && vitest run tests/build",
+    "test:e2e": "astro build && playwright test",
+    "test": "yarn test:unit && yarn test:build && playwright test"
+  },
+  "dependencies": {
+    "astro": "^7.4.12"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "linkedom": "^0.18.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
