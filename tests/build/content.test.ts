@@ -7,6 +7,8 @@ const PROMISES = [
   'Treinamento na entrega.',
   'Plano de manutenção mensal: correções, melhorias, servidor e backup, com resposta em até 1 dia útil.',
   'Site em semanas, sistema em meses.',
+  'Pelo WhatsApp, sem compromisso.',
+  'Escopo, prazo e valor fechados por escrito.',
 ];
 
 describe('conteúdo da home', () => {
