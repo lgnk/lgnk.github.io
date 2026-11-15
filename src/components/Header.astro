@@ -1,0 +1,32 @@
+---
+import WhatsAppLink from './WhatsAppLink.astro';
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="wordmark" aria-label="LGNK Sistemas — início">
+      <span class="wm-main">LGNK</span><span class="wm-sub">SISTEMAS</span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="/#servicos">Serviços</a>
+      <a href="/#trabalhos">Trabalhos</a>
+      <a href="/#como-trabalhamos">Como trabalhamos</a>
+      <a href="/#perguntas">Perguntas</a>
+    </nav>
+    <WhatsAppLink variant="solid" label="WhatsApp ↗" />
+  </div>
+</header>
+
+<style>
+  .site-header { border-bottom: 1px solid var(--ink); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 68px; }
+  .wordmark { display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none; }
+  .wm-main { font-weight: 800; font-size: 19px; letter-spacing: 0.14em; }
+  .wm-sub { font-weight: 500; font-size: 13px; letter-spacing: 0.06em; }
+  .nav { display: none; gap: 28px; font-size: 15px; margin-left: auto; }
+  .nav a { text-decoration: none; }
+  .nav a:hover { color: var(--accent); }
+  @media (min-width: 768px) {
+    .nav { display: flex; }
+  }
+</style>
