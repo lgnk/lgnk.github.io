@@ -85,3 +85,5 @@ button { font: inherit; color: inherit; }
   .grid4 { grid-template-columns: repeat(4, 1fr); }
 }
 .num { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+[hidden] { display: none !important; }

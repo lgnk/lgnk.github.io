@@ -1,0 +1,31 @@
+<div id="consent" role="region" aria-label="Cookies" hidden>
+  <div class="wrap inner">
+    <p>
+      Usamos cookies do Microsoft Clarity para entender como o site é usado e melhorá-lo. Você pode recusar.{' '}
+      <a href="/privacidade/">Saiba mais</a>
+    </p>
+    <div class="actions">
+      <button type="button" data-consent="granted" class="accept">Aceitar</button>
+      <button type="button" data-consent="denied" class="deny">Recusar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  #consent {
+    position: fixed; inset: auto 0 0 0; z-index: 50;
+    background: var(--ink); color: var(--paper); border-top: 1px solid var(--paper);
+  }
+  .inner { display: grid; gap: 14px; padding-block: 16px; font-size: 15px; }
+  a { color: var(--paper); text-underline-offset: 3px; }
+  .actions { display: flex; gap: 10px; }
+  button { cursor: pointer; padding: 10px 18px; font-weight: 600; font-size: 15px; border: 1px solid var(--paper); }
+  .accept { background: var(--paper); color: var(--ink); }
+  .deny { background: transparent; color: var(--paper); }
+  .accept:hover { background: var(--footer-accent); border-color: var(--footer-accent); }
+  .deny:hover { color: var(--footer-accent); border-color: var(--footer-accent); }
+  #consent :focus-visible { outline-color: var(--footer-accent); }
+  @media (min-width: 768px) {
+    .inner { grid-template-columns: 1fr auto; align-items: center; gap: 32px; }
+  }
+</style>
