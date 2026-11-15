@@ -69,4 +69,19 @@ button { font: inherit; color: inherit; }
 .section-title {
   font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.04;
   max-width: 22ch;
+  text-wrap: balance;
 }
+
+/* Grade de 4 blocos com linhas finas (serviços, processo) */
+.grid4 { display: grid; grid-template-columns: 1fr; margin-top: 40px; border-top: 1px solid var(--ink); }
+.grid4 > li { padding: 24px 0 28px; border-bottom: 1px solid var(--ink); }
+.grid4 h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; }
+.grid4 p { color: var(--muted); margin-top: 8px; }
+@media (min-width: 768px) {
+  .grid4 { grid-template-columns: repeat(2, 1fr); border-left: 1px solid var(--ink); }
+  .grid4 > li { padding: 24px 24px 28px; border-right: 1px solid var(--ink); }
+}
+@media (min-width: 1100px) {
+  .grid4 { grid-template-columns: repeat(4, 1fr); }
+}
+.num { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }

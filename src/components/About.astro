@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+
+const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/ian.{jpg,jpeg,png,webp}', { eager: true });
+const photo = Object.values(photos)[0]?.default;
+---
+
+<section id="quem-esta-por-tras" class="section">
+  <div class="wrap about">
+    {
+      photo ? (
+        <Image src={photo} width={240} alt="Ian Langkammer" class="photo" />
+      ) : (
+        <div class="monogram" aria-hidden="true">IL</div>
+      )
+    }
+    <div>
+      <p class="eyebrow">Quem está por trás</p>
+      <h2 class="name">Ian Langkammer</h2>
+      <p class="role">Fundador</p>
+      <p class="bio">
+        Engenheiro de software sênior e arquiteto. Lidera a arquitetura da Beerpass Club e criou o Avance Trainer do
+        zero. Sistemas de Informação pela UFOP. Programando desde os 15 anos.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { display: grid; gap: 24px; align-items: start; }
+  .monogram, .photo { width: 120px; height: 140px; object-fit: cover; }
+  .monogram {
+    background: var(--rule); display: grid; place-items: center;
+    font-size: 40px; font-weight: 800; letter-spacing: 0.06em;
+  }
+  .name { font-size: clamp(26px, 3vw, 32px); font-weight: 700; letter-spacing: -0.02em; }
+  .role { color: var(--accent); font-weight: 600; margin-top: 2px; }
+  .bio { color: var(--muted); margin-top: 12px; max-width: 62ch; font-size: 17px; }
+  @media (min-width: 768px) {
+    .about { grid-template-columns: 160px 1fr; gap: 40px; }
+    .monogram, .photo { width: 160px; height: 190px; }
+  }
+</style>

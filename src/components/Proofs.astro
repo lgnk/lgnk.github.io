@@ -1,0 +1,35 @@
+---
+const proofs = [
+  { value: '8+', label: 'modelos de maquininha integrados' },
+  { value: '5,0★', label: 'nas lojas com o Avance Trainer' },
+  { value: '5+ anos', label: 'construindo produtos de ponta a ponta' },
+];
+---
+
+<section id="provas" class="proofs" aria-label="Números">
+  <ul class="wrap proofs-grid">
+    {
+      proofs.map((p) => (
+        <li>
+          <span class="value">{p.value}</span>
+          <span class="label">{p.label}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .proofs { border-bottom: 1px solid var(--ink); }
+  .proofs-grid { display: grid; grid-template-columns: 1fr; }
+  .proofs-grid li { display: grid; grid-template-columns: 7.5rem 1fr; align-items: baseline; gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .proofs-grid li:last-child { border-bottom: 0; }
+  .value { font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; letter-spacing: -0.03em; white-space: nowrap; }
+  .label { color: var(--muted); font-size: 15px; }
+  @media (min-width: 768px) {
+    .proofs-grid { grid-template-columns: repeat(3, 1fr); }
+    .proofs-grid li { grid-template-columns: 1fr; gap: 4px; padding: 24px 24px 24px 0; border-bottom: 0; border-right: 1px solid var(--ink); }
+    .proofs-grid li + li { padding-left: 24px; }
+    .proofs-grid li:last-child { border-right: 0; }
+  }
+</style>

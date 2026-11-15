@@ -1,0 +1,25 @@
+---
+const steps = [
+  { title: 'Conversa', text: 'Pelo WhatsApp, sem compromisso. Você conta o problema.' },
+  { title: 'Diagnóstico e proposta', text: 'Escopo, prazo e valor fechados por escrito.' },
+  { title: 'Construção', text: 'Entregas toda semana: você acompanha e testa.' },
+  { title: 'Entrega e cuidado', text: 'Treinamento na entrega. Depois, o plano de manutenção mensal.' },
+];
+---
+
+<section id="como-trabalhamos" class="section">
+  <div class="wrap">
+    <p class="eyebrow">Processo</p>
+    <h2 class="section-title">Sem surpresa no meio do caminho.</h2>
+    <ol class="grid4">
+      {
+        steps.map((s, i) => (
+          <li>
+            <h3><span class="num">{i + 1}</span> {s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

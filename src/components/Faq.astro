@@ -1,0 +1,42 @@
+---
+import { site } from '../config';
+
+const faqs = [
+  {
+    q: 'Quanto custa?',
+    a: `Site vitrine a partir de ${site.sitePriceFrom}. Sistema sob medida tem proposta fechada depois do diagnóstico: escopo, prazo e valor por escrito.`,
+  },
+  { q: 'Quanto tempo leva?', a: 'Site em semanas, sistema em meses.' },
+  { q: 'O sistema fica meu?', a: 'Sim, o código e os dados são da sua empresa.' },
+  {
+    q: 'E se der problema depois?',
+    a: 'Plano de manutenção mensal: correções, melhorias, servidor e backup, com resposta em até 1 dia útil.',
+  },
+];
+---
+
+<section id="perguntas" class="section">
+  <div class="wrap">
+    <h2 class="eyebrow">Perguntas frequentes</h2>
+    <dl class="faq">
+      {
+        faqs.map((f) => (
+          <div class="item">
+            <dt>{f.q}</dt>
+            <dd>{f.a}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .faq { display: grid; gap: 0 48px; margin-top: 8px; }
+  .item { border-top: 1px solid var(--ink); padding: 18px 0 22px; }
+  dt { font-weight: 700; font-size: 18px; }
+  dd { color: var(--muted); margin-top: 6px; }
+  @media (min-width: 768px) {
+    .faq { grid-template-columns: 1fr 1fr; }
+  }
+</style>
