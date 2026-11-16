@@ -51,17 +51,23 @@ const visible = (page: import('@playwright/test').Page) =>
     .poll(() => page.locator('#loader').evaluate((el) => getComputedStyle(el).opacity).catch(() => 'sumiu'), { timeout: 1500 })
     .toBe('1');
 
-test('internet lenta: a nuvem cai em degraus, fica flutuando e os três pontinhos piscam em sequência', async ({ page }) => {
+test('internet lenta: a nuvem cai e flutua, e o rostinho alterna com um ícone girando; os pontinhos ficam parados', async ({ page }) => {
   await slowFonts(page);
   await page.goto('/', { waitUntil: 'commit' });
   await visible(page);
-  const cloud = await page.locator('#loader .loader-cloud').evaluate((el) => getComputedStyle(el).animationName);
-  expect(cloud).toContain('loader-drop');
-  expect(cloud).toContain('loader-bob');
-  const dots = await page.locator('#loader .loader-dots i').evaluateAll((els) =>
+  const names = (sel: string) => page.locator(sel).evaluateAll((els) => els.map((el) => getComputedStyle(el).animationName));
+  const [face] = await names('#loader .loader-face');
+  expect(face).toContain('loader-drop');
+  expect(face).toContain('loader-bob');
+  expect(await names('#loader .loader-cloud .f-idle')).toEqual(['loader-show-face']);
+  expect(await names('#loader .loader-spinner')).toEqual(['loader-show-spin']);
+  const squares = await page.locator('#loader .loader-spinner rect').evaluateAll((els) =>
     els.map((el) => ({ name: getComputedStyle(el).animationName, delay: getComputedStyle(el).animationDelay })),
   );
-  expect(dots.map((d) => d.name)).toEqual(['loader-dot-1', 'loader-dot-2', 'loader-dot-3']);
+  expect(squares).toHaveLength(8);
+  for (const q of squares) expect(q.name).toBe('loader-spin');
+  expect(new Set(squares.map((q) => q.delay)).size).toBe(8);
+  expect(await names('#loader .loader-dots i')).toEqual(['none', 'none', 'none']);
 });
 
 test('internet lenta: a tela sai fechando em persianas antes de sumir', async ({ page }) => {
@@ -90,13 +96,14 @@ test('antes da nuvem aparecer (0,4 s), nada fica inerte', async ({ page }) => {
   expect(await page.evaluate(() => document.querySelector('main')!.inert)).toBe(false);
 });
 
-test('com movimento reduzido a nuvem não pula nem flutua, e os pontinhos ficam parados', async ({ page }) => {
+test('com movimento reduzido a nuvem fica parada, só com o rostinho', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await slowFonts(page);
   await page.goto('/', { waitUntil: 'commit' });
   await visible(page);
-  expect(await page.locator('#loader .loader-cloud').evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
-  expect(await page.locator('#loader .loader-dots i').first().evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+  expect(await page.locator('#loader .loader-face').evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+  expect(await page.locator('#loader .loader-cloud .f-idle').evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
+  expect(await page.locator('#loader .loader-spinner').evaluate((el) => getComputedStyle(el).opacity)).toBe('0');
 });
 
 test('os três pontinhos ficam no meio da altura do texto "carregando", e o conjunto no centro da nuvem', async ({ page }) => {
@@ -125,25 +132,17 @@ test('os três pontinhos ficam no meio da altura do texto "carregando", e o conj
   expect(Math.abs(m.labelCenter - m.cloudCenter)).toBeLessThanOrEqual(1);
 });
 
-test('os pontinhos da etiqueta são iguais aos da boca da nuvem: cor, tamanho e espaço', async ({ page }) => {
+test('os pontinhos da etiqueta são amarelos, do tamanho dos quadradinhos do ícone girando', async ({ page }) => {
   await slowFonts(page, 2500);
   await page.goto('/', { waitUntil: 'commit' });
   await visible(page);
   const m = await page.evaluate(() => {
-    const mouth = [...document.querySelectorAll('#loader .f-proc rect[height="5"][width="5"]')].map((r) => r.getBoundingClientRect());
-    const dots = [...document.querySelectorAll('#loader .loader-dots i')];
-    const boxes = dots.map((d) => d.getBoundingClientRect());
-    return {
-      mouthSize: mouth[0].width,
-      mouthGap: mouth[1].left - mouth[0].right,
-      dotSize: boxes[0].width,
-      dotHeight: boxes[0].height,
-      dotGap: boxes[1].left - boxes[0].right,
-      color: getComputedStyle(dots[0]).backgroundColor,
-    };
+    const square = document.querySelector('#loader .loader-spinner rect')!.getBoundingClientRect();
+    const dot = document.querySelector('#loader .loader-dots i')!;
+    const box = dot.getBoundingClientRect();
+    return { square: square.width, dot: box.width, dotHeight: box.height, color: getComputedStyle(dot).backgroundColor };
   });
   expect(m.color).toBe('rgb(255, 210, 63)');
-  expect(Math.abs(m.dotSize - m.mouthSize)).toBeLessThanOrEqual(0.5);
-  expect(Math.abs(m.dotHeight - m.mouthSize)).toBeLessThanOrEqual(0.5);
-  expect(Math.abs(m.dotGap - m.mouthGap)).toBeLessThanOrEqual(0.5);
+  expect(Math.abs(m.dot - m.square)).toBeLessThanOrEqual(0.5);
+  expect(Math.abs(m.dotHeight - m.square)).toBeLessThanOrEqual(0.5);
 });
