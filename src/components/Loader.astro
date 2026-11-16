@@ -9,7 +9,7 @@ import Mascot from './Mascot.astro';
 <div id="loader" class="loader" aria-hidden="true">
   <div class="loader-box">
     <Mascot animated manualStart states={['proc']} state="proc" className="loader-cloud" />
-    <span class="loader-label">carregando<span class="loader-cursor">_</span></span>
+    <span class="loader-label">carregando<span class="loader-dots"><i></i><i></i><i></i></span></span>
   </div>
 </div>
 <noscript><style>#loader { display: none; }</style></noscript>
@@ -24,22 +24,39 @@ import Mascot from './Mascot.astro';
     background: var(--cream); animation: loader-in 0.2s ease-out 0.4s both;
   }
   .loader-box { display: grid; justify-items: center; gap: 4px; }
-  /* O cursor "_" ocupa 1ch à direita; 1ch a mais à esquerda deixa a palavra centrada sob os pontinhos da nuvem. */
-  .loader-label { font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px 8px calc(10px + 1ch); }
-  .loader :global(.loader-cloud) { width: 132px; height: 132px; }
+  /*
+    Os três pontinhos são quadrados de pixel, não o caractere "…": o "…" fica na base da linha e, enquanto a fonte
+    não chega (justo quando esta tela aparece), vem da fonte reserva e entorta. Aqui eles ficam no meio da altura do texto.
+  */
+  .loader-label {
+    display: inline-flex; align-items: center; gap: 5px;
+    font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px;
+    /* Esta tela só aparece enquanto a fonte do site não chegou: usa a mono do sistema, não a Courier da reserva. */
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+  /* Iguais aos da boca da nuvem (topo e aqui): amarelos, 5 unidades de 120 da nuvem, 4 de espaço. */
+  .loader-dots { display: inline-flex; gap: calc(var(--cloud) * 4 / 120); }
+  .loader-dots i { display: block; width: calc(var(--cloud) * 5 / 120); height: calc(var(--cloud) * 5 / 120); background: var(--yellow); }
+  .loader { --cloud: 132px; }
+  .loader :global(.loader-cloud) { width: var(--cloud); height: var(--cloud); }
   @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
   @keyframes loader-out { to { opacity: 0; } }
 
-  /* Fliperama: a nuvem cai em 4 quadros, depois flutua em 2; o cursor pisca. */
+  /* Fliperama: a nuvem cai em 4 quadros, depois flutua em 2; os pontinhos acendem em sequência. */
   @media (prefers-reduced-motion: no-preference) {
     .loader :global(.loader-cloud) {
       animation: loader-drop 0.32s steps(4, end) 0.4s both, loader-bob 1s steps(1, end) 0.72s infinite;
     }
-    .loader-cursor { animation: loader-blink 1s steps(1, end) infinite; }
+    /* Mesma sequência da boca da nuvem (1 → 0,2), um pontinho aceso de cada vez, em 0,9 s. */
+    .loader-dots i:nth-child(1) { animation: loader-dot-1 0.9s linear infinite; }
+    .loader-dots i:nth-child(2) { animation: loader-dot-2 0.9s linear infinite; }
+    .loader-dots i:nth-child(3) { animation: loader-dot-3 0.9s linear infinite; }
   }
   @keyframes loader-drop { from { translate: 0 -36px; } to { translate: 0 0; } }
   @keyframes loader-bob { 50% { translate: 0 -4px; } }
-  @keyframes loader-blink { 50% { opacity: 0; } }
+  @keyframes loader-dot-1 { 0% { opacity: 1; } 50%, 100% { opacity: 0.2; } }
+  @keyframes loader-dot-2 { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+  @keyframes loader-dot-3 { 0%, 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
   /* Saída: a tela fecha em 8 persianas, em 6 quadros, e mostra o site por trás. */
   @property --wipe { syntax: '<percentage>'; inherits: false; initial-value: 100%; }
