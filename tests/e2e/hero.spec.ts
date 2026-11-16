@@ -77,3 +77,26 @@ test('ligar o movimento reduzido com a página aberta para a animação', async 
   await expect(stage).toHaveAttribute('data-running', 'false');
   expect(await page.evaluate(() => (document.getElementById('heroMascot') as unknown as SVGSVGElement).animationsPaused())).toBe(true);
 });
+
+test('em tela larga o palco vai até a borda direita e o texto segue alinhado ao logo', async ({ page }) => {
+  for (const width of [1360, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const m = await page.evaluate(() => {
+      const box = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const copy = document.querySelector('.hero-copy')!;
+      return {
+        viewport: document.documentElement.clientWidth,
+        scroll: document.documentElement.scrollWidth,
+        stageRight: box('#heroStage').right,
+        canvasRight: box('#heroStage canvas').right,
+        textLeft: copy.getBoundingClientRect().left + parseFloat(getComputedStyle(copy).paddingLeft),
+        logoLeft: box('.site-header a').left,
+      };
+    });
+    expect(Math.abs(m.stageRight - m.viewport), `${width}px`).toBeLessThanOrEqual(1);
+    expect(Math.abs(m.canvasRight - m.viewport), `${width}px`).toBeLessThanOrEqual(1);
+    expect(Math.abs(m.textLeft - m.logoLeft), `${width}px`).toBeLessThanOrEqual(1);
+    expect(m.scroll, `${width}px`).toBeLessThanOrEqual(m.viewport);
+  }
+});

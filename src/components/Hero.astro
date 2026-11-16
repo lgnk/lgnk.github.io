@@ -36,7 +36,8 @@ import WhatsAppLink from './WhatsAppLink.astro';
 </script>
 
 <style>
-  .hero { border-bottom: var(--line); }
+  /* O topo é um container: o palco usa a largura dele (cqw) para sangrar até a borda da tela. */
+  .hero { border-bottom: var(--line); container-type: inline-size; }
   .hero-grid { display: grid; padding-inline: 0; }
   .hero-copy { padding: clamp(40px, 7vw, 72px) var(--gutter) 36px; align-self: center; }
   .nowrap { white-space: nowrap; }
@@ -71,7 +72,11 @@ import WhatsAppLink from './WhatsAppLink.astro';
   @media (min-width: 900px) {
     .hero-grid { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); padding-inline: 0; }
     .hero-copy { padding-left: var(--gutter); padding-right: 40px; }
-    .hero-stage { height: auto; min-height: 480px; border-top: 0; border-left: var(--line); }
+    /* O texto fica na coluna do site; o palco passa da coluna e vai até a borda direita, onde as linhas saem. */
+    .hero-stage {
+      height: auto; min-height: 480px; border-top: 0; border-left: var(--line);
+      margin-right: calc(-1 * max(0px, (100cqw - var(--maxw)) / 2));
+    }
     .hero-stage :global(.hero-mascot) { width: 176px; height: 176px; }
     .hero-label { top: calc(46% + 82px); }
   }
