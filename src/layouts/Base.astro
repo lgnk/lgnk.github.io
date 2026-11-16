@@ -11,9 +11,11 @@ interface Props {
   title: string;
   description: string;
   path: string;
+  /** Página fora da busca (ex.: 404): sem canonical e com robots noindex. */
+  noindex?: boolean;
 }
 
-const { title, description, path } = Astro.props;
+const { title, description, path, noindex = false } = Astro.props;
 const canonical = new URL(path, site.url).href;
 const ogImage = new URL('/og.png', site.url).href;
 // Valida o ID no build; a tag em si só é carregada no navegador depois do aceite.
@@ -39,8 +41,10 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#FFF8EC" />
 
     <meta property="og:type" content="website" />

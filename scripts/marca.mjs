@@ -2,9 +2,10 @@
 //   marca/avatar-1024.png  → foto do WhatsApp Business e avatar do GitHub
 //   marca/logo.png         → logo horizontal com fundo transparente
 //   public/og.png          → imagem de compartilhamento (1200×630)
+//   public/apple-touch-icon.png (180) e public/icon-512.png → ícone ao salvar na tela inicial
 // Rode: yarn build && node scripts/marca.mjs
 import { chromium } from '@playwright/test';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
@@ -29,6 +30,18 @@ await logo.goto(new URL('scripts/logo.html', root).href, { waitUntil: 'networkid
 await logo.evaluate(() => document.fonts.ready);
 await logo.locator('#logo').screenshot({ path: file('marca/logo.png'), omitBackground: true });
 
+// Ícones de tela inicial: a nuvem em escala inteira (1 ou 4 px por unidade) sobre amarelo, sem borrar os pixels.
+const avatarSvg = readFileSync(file('dist/marca/avatar.svg'), 'utf8');
+for (const [out, size, cloud] of [['public/apple-touch-icon.png', 180, 120], ['public/icon-512.png', 512, 480]]) {
+  const icon = await browser.newPage({ viewport: { width: size, height: size } });
+  await icon.setContent(
+    `<body style="margin:0;background:#FFD23F;display:grid;place-items:center;height:${size}px">` +
+      avatarSvg.replace('<svg ', `<svg width="${cloud}" height="${cloud}" `) +
+      '</body>',
+  );
+  await icon.screenshot({ path: file(out) });
+}
+
 // Imagem de compartilhamento.
 const og = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 await og.goto(new URL('scripts/og.html', root).href, { waitUntil: 'networkidle' });
@@ -36,4 +49,4 @@ await og.evaluate(() => document.fonts.ready);
 await og.screenshot({ path: file('public/og.png') });
 
 await browser.close();
-console.log('marca/avatar-1024.png, marca/logo.png e public/og.png gerados.');
+console.log('marca/avatar-1024.png, marca/logo.png, public/og.png e ícones de tela inicial gerados.');
