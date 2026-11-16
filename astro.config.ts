@@ -5,6 +5,8 @@ import { site } from './src/config';
 export default defineConfig({
   site: site.url,
   integrations: [launchGuard()],
+  // CSS dentro do HTML: sem esperar um arquivo a mais, e a nuvem de carregamento consegue aparecer cedo.
+  build: { inlineStylesheets: 'always' },
   fonts: [
     {
       name: 'Inter Tight',

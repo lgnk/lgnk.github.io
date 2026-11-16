@@ -38,6 +38,12 @@ describe('mascotSvg', () => {
     for (const a of anims) expect(a).toContain('begin="indefinite"');
   });
 
+  it('começa no estado pedido', () => {
+    const s = mascotSvg({ states: ['proc'], state: 'proc' });
+    expect(s).toContain('data-state="proc"');
+    expect(s).toContain('class="f-proc"');
+  });
+
   it('escapa classe e cor de fundo', () => {
     const s = mascotSvg({ className: 'a"b', background: { color: '#fff" onload="x', shape: 'square' } });
     expect(s).toContain('class="mascot a&quot;b"');

@@ -3,6 +3,7 @@ import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
+import Loader from '../components/Loader.astro';
 import { clarityScriptUrl } from '../lib/clarity';
 import { site } from '../config';
 import '../styles/global.css';
@@ -65,6 +66,7 @@ const jsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
+    <Loader />
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <Header />
     <main id="conteudo">
@@ -72,6 +74,24 @@ const jsonLd = {
     </main>
     <Footer />
     <ConsentBanner />
+    <script is:inline>
+      // O HTML chegou inteiro: some com a nuvem de carregamento assim que as fontes estiverem prontas (no máximo 2,5 s).
+      (function () {
+        var loader = document.getElementById('loader');
+        if (!loader) return;
+        var gone = false;
+        function hide() {
+          if (gone) return;
+          gone = true;
+          var visible = getComputedStyle(loader).opacity !== '0';
+          loader.classList.add('loader--out');
+          setTimeout(function () { loader.remove(); }, visible ? 220 : 0);
+        }
+        var cap = setTimeout(hide, 2500);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { clearTimeout(cap); hide(); });
+        else hide();
+      })();
+    </script>
     <script>
       import '../scripts/site';
     </script>

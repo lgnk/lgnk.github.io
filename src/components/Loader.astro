@@ -1,0 +1,35 @@
+---
+import Mascot from './Mascot.astro';
+---
+
+<!--
+  Tela de carregamento: só aparece se o site demorar mais de 0,4 s (internet ruim).
+  Some quando o HTML e as fontes estão prontos, no máximo 2,5 s depois (script no fim do <body> em Base.astro).
+-->
+<div id="loader" class="loader" aria-hidden="true">
+  <div class="loader-box">
+    <Mascot animated manualStart states={['proc']} state="proc" className="loader-cloud" />
+    <span class="loader-label">carregando…</span>
+  </div>
+</div>
+<noscript><style>#loader { display: none; }</style></noscript>
+<script is:inline>
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+    document.querySelectorAll('#loader animate').forEach(function (a) { a.beginElement(); });
+</script>
+
+<style>
+  .loader {
+    position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+    background: var(--cream); animation: loader-in 0.2s ease-out 0.4s both;
+  }
+  .loader-box { display: grid; justify-items: center; gap: 4px; }
+  .loader :global(.loader-cloud) { width: 132px; height: 132px; }
+  .loader-label { font: 700 13px/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px; }
+  .loader.loader--out { opacity: 0; transition: opacity 0.2s ease-out; }
+  @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .loader { animation-duration: 0s; }
+    .loader.loader--out { transition: none; }
+  }
+</style>

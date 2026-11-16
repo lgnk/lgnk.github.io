@@ -12,6 +12,8 @@ export interface MascotOptions {
   manualStart?: boolean;
   /** Estados desenhados; cada um vira `<g class="f-<estado>">`. Padrão: só "esperando". */
   states?: MascotState[];
+  /** Estado inicial (data-state). Padrão: "esperando". */
+  state?: MascotState;
   /** Com título, o SVG é uma imagem com nome; sem, é decorativo (aria-hidden). */
   title?: string;
   background?: { color: string; shape: 'square' | 'circle' };
@@ -110,7 +112,7 @@ function done(): string {
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export function mascotSvg(options: MascotOptions = {}): string {
-  const { animated = false, manualStart = false, states = ['idle'], title, background, id, className, viewBox = '0 0 120 120' } = options;
+  const { animated = false, manualStart = false, states = ['idle'], state = 'idle', title, background, id, className, viewBox = '0 0 120 120' } = options;
   const faces: Record<MascotState, () => string> = { idle: () => idle(animated), proc: () => proc(animated), done };
 
   const attrs = [
@@ -118,7 +120,7 @@ export function mascotSvg(options: MascotOptions = {}): string {
     `viewBox="${escape(viewBox)}"`,
     'shape-rendering="crispEdges"',
     `class="${escape(['mascot', className].filter(Boolean).join(' '))}"`,
-    'data-state="idle"',
+    `data-state="${state}"`,
     id ? `id="${escape(id)}"` : '',
     title ? 'role="img"' : 'aria-hidden="true" focusable="false"',
   ].filter(Boolean);
