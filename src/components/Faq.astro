@@ -1,16 +1,21 @@
 ---
-const faqs = [
+import { pixelIconSvg, type FaqIcon } from '../lib/icons';
+
+const faqs: { icon: FaqIcon; q: string; a: string }[] = [
   {
+    icon: 'custo',
     q: 'Quanto custa?',
     a: 'Depende do que você precisa. Depois de uma conversa rápida, você recebe a proposta com escopo, prazo e valor fechados por escrito, sem compromisso.',
   },
-  { q: 'Quanto tempo leva?', a: 'Site em semanas, sistema em meses.' },
-  { q: 'O sistema fica meu?', a: 'Sim, o código e os dados são da sua empresa.' },
+  { icon: 'tempo', q: 'Quanto tempo leva?', a: 'Site em semanas, sistema em meses.' },
+  { icon: 'dono', q: 'O sistema fica meu?', a: 'Sim, o código e os dados são da sua empresa.' },
   {
+    icon: 'caminho',
     q: 'Não sei se preciso de site, app ou sistema.',
     a: 'Normal. Conta o problema pelo WhatsApp que a gente diz o que resolve, e o que você não precisa.',
   },
   {
+    icon: 'escudo',
     q: 'E se der problema depois?',
     a: 'Plano de manutenção mensal: correções, melhorias, servidor e backup, com resposta em até 1 dia útil.',
   },
@@ -24,7 +29,10 @@ const faqs = [
       {
         faqs.map((f) => (
           <div class="item">
-            <dt>{f.q}</dt>
+            <dt>
+              <Fragment set:html={pixelIconSvg(f.icon, 'faq-icon')} />
+              <span>{f.q}</span>
+            </dt>
             <dd>{f.a}</dd>
           </div>
         ))
@@ -36,8 +44,10 @@ const faqs = [
 <style>
   .faq { display: grid; gap: 0 48px; margin-top: 8px; }
   .item { border-top: var(--line); padding: 18px 0 22px; }
-  dt { font-weight: 700; font-size: var(--text-lead); }
-  dd { color: var(--muted); margin-top: 6px; }
+  /* Ícone de 32 px (2 px por pixel do desenho) ao lado da pergunta; a resposta alinha com o texto. */
+  dt { display: grid; grid-template-columns: 32px 1fr; gap: 14px; align-items: center; font-weight: 700; font-size: var(--text-lead); }
+  dt :global(.faq-icon) { width: 32px; height: 32px; }
+  dd { color: var(--muted); margin-top: 6px; padding-left: 46px; }
   @media (min-width: 768px) {
     .faq { grid-template-columns: 1fr 1fr; }
   }

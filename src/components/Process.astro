@@ -1,9 +1,11 @@
 ---
-const steps = [
-  { title: 'Conversa', text: 'Pelo WhatsApp, sem compromisso. Você conta o problema, a gente pergunta o resto.' },
-  { title: 'Diagnóstico e proposta', text: 'Escopo, prazo e valor fechados por escrito.' },
-  { title: 'Construção', text: 'Entregas toda semana: você acompanha e testa.' },
-  { title: 'Entrega e cuidado', text: 'Treinamento na entrega. Depois, o plano de manutenção mensal.' },
+import { pixelIconSvg, type ProcessIcon } from '../lib/icons';
+
+const steps: { icon: ProcessIcon; title: string; text: string }[] = [
+  { icon: 'conversa', title: 'Conversa', text: 'Pelo WhatsApp, sem compromisso. Você conta o problema, a gente pergunta o resto.' },
+  { icon: 'proposta', title: 'Diagnóstico e proposta', text: 'Escopo, prazo e valor fechados por escrito.' },
+  { icon: 'construcao', title: 'Construção', text: 'Entregas toda semana: você acompanha e testa.' },
+  { icon: 'entrega', title: 'Entrega e cuidado', text: 'Treinamento na entrega. Depois, o plano de manutenção mensal.' },
 ];
 ---
 
@@ -15,6 +17,7 @@ const steps = [
       {
         steps.map((s, i) => (
           <li>
+            <Fragment set:html={pixelIconSvg(s.icon)} />
             <h3><span class="num">{i + 1}</span> {s.title}</h3>
             <p>{s.text}</p>
           </li>

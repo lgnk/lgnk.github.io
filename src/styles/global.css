@@ -145,6 +145,8 @@ mark { background: var(--yellow); color: var(--ink); padding: 0 0.1em; }
 .grid4 > li { padding: 22px 22px 26px; background: var(--white); border: var(--line); box-shadow: var(--shadow); }
 .grid4 h3 { font-size: var(--text-h3); font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; }
 .grid4 p { color: var(--muted); margin-top: 8px; }
+/* Ícone de pixel no topo do cartão: 48 px = cada pixel do desenho vira 3 px de tela, sem borrar. */
+.grid4 .pixel-icon { display: block; width: 48px; height: 48px; margin-bottom: 18px; }
 @media (min-width: 768px) {
   .grid4 { grid-template-columns: repeat(2, 1fr); gap: 22px; }
 }

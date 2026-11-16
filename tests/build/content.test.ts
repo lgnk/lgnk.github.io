@@ -51,6 +51,32 @@ describe('conteúdo da home', () => {
     expect(new Set(icons.map((i) => i?.innerHTML)).size).toBe(4);
   });
 
+  it('cada passo do processo abre com o seu ícone de pixel', () => {
+    const icons = [...doc.querySelectorAll('#como-trabalhamos li')].map((li) => li.firstElementChild);
+    expect(icons).toHaveLength(4);
+    for (const icon of icons) {
+      expect(icon?.tagName.toLowerCase()).toBe('svg');
+      expect(icon?.getAttribute('class')).toContain('pixel-icon');
+      expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    }
+    expect(new Set(icons.map((i) => i?.innerHTML)).size).toBe(4);
+  });
+
+  it('cada pergunta frequente tem o seu ícone, sem mudar o texto da pergunta', () => {
+    const dts = [...doc.querySelectorAll('#perguntas dt')];
+    expect(dts).toHaveLength(5);
+    const icons = dts.map((dt) => dt.querySelector('svg.pixel-icon'));
+    for (const icon of icons) expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    expect(new Set(icons.map((i) => i?.innerHTML)).size).toBe(5);
+    expect(dts.map(text)).toEqual([
+      'Quanto custa?',
+      'Quanto tempo leva?',
+      'O sistema fica meu?',
+      'Não sei se preciso de site, app ou sistema.',
+      'E se der problema depois?',
+    ]);
+  });
+
   it('quanto custa: proposta por escrito depois de uma conversa, sem número', () => {
     expect(body).toContain('Depende do que você precisa.');
   });
