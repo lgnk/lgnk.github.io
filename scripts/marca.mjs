@@ -3,6 +3,7 @@
 //   marca/logo.png         → logo horizontal com fundo transparente
 //   public/og.png          → imagem de compartilhamento (1200×630)
 //   public/apple-touch-icon.png (180) e public/icon-512.png → ícone ao salvar na tela inicial
+//   marca/whatsapp-perfil.png → foto de perfil do WhatsApp Business (1024, folga para o círculo)
 // Rode: yarn build && node scripts/marca.mjs
 import { chromium } from '@playwright/test';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
@@ -32,7 +33,12 @@ await logo.locator('#logo').screenshot({ path: file('marca/logo.png'), omitBackg
 
 // Ícones de tela inicial: a nuvem em escala inteira (1 ou 4 px por unidade) sobre amarelo, sem borrar os pixels.
 const avatarSvg = readFileSync(file('dist/marca/avatar.svg'), 'utf8');
-for (const [out, size, cloud] of [['public/apple-touch-icon.png', 180, 120], ['public/icon-512.png', 512, 480]]) {
+for (const [out, size, cloud] of [
+  ['public/apple-touch-icon.png', 180, 120],
+  ['public/icon-512.png', 512, 480],
+  // Foto de perfil do WhatsApp: 7 px por pixel da nuvem, com folga para o recorte redondo.
+  ['marca/whatsapp-perfil.png', 1024, 840],
+]) {
   const icon = await browser.newPage({ viewport: { width: size, height: size } });
   await icon.setContent(
     `<body style="margin:0;background:#FFD23F;display:grid;place-items:center;height:${size}px">` +
