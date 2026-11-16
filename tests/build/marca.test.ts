@@ -25,6 +25,9 @@ describe('arquivos da marca', () => {
   it('símbolo, avatar e logo publicados', () => {
     expect(readFileSync(join(DIST, 'marca', 'simbolo.svg'), 'utf8')).toContain('viewBox="0 0 120 120"');
     expect(readFileSync(join(DIST, 'marca', 'avatar.svg'), 'utf8')).toContain('#FFD23F');
+    const proc = readFileSync(join(DIST, 'marca', 'simbolo-processando.svg'), 'utf8');
+    expect(proc).toContain('data-state="proc"');
+    expect(proc).not.toContain('<animate');
     const logo = readFileSync(join(DIST, 'marca', 'logo.svg'), 'utf8');
     expect(logo).toContain('>lgnk<');
     expect(logo).toContain('>sistemas<');

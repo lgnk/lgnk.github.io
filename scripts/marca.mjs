@@ -4,6 +4,7 @@
 //   public/og.png          → imagem de compartilhamento (1200×630)
 //   public/apple-touch-icon.png (180) e public/icon-512.png → ícone ao salvar na tela inicial
 //   marca/whatsapp-perfil.png → foto de perfil do WhatsApp Business (1024, folga para o círculo)
+//   marca/whatsapp-capa.png   → capa do perfil do WhatsApp Business (2422×1362, 16:9)
 // Rode: yarn build && node scripts/marca.mjs
 import { chromium } from '@playwright/test';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
@@ -47,6 +48,12 @@ for (const [out, size, cloud] of [
   );
   await icon.screenshot({ path: file(out) });
 }
+
+// Capa do perfil do WhatsApp Business: 1211×681 (16:9) em 2× para ficar nítida.
+const capa = await browser.newPage({ viewport: { width: 1211, height: 681 }, deviceScaleFactor: 2 });
+await capa.goto(new URL('scripts/whatsapp-capa.html', root).href, { waitUntil: 'networkidle' });
+await capa.evaluate(() => document.fonts.ready);
+await capa.screenshot({ path: file('marca/whatsapp-capa.png') });
 
 // Imagem de compartilhamento.
 const og = await browser.newPage({ viewport: { width: 1200, height: 630 } });

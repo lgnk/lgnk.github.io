@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<!-- Gerador local da capa do perfil do WhatsApp Business (marca/whatsapp-capa.png). Não faz parte do site.
+     Rode: yarn build && node scripts/marca.mjs  ·  Quadro 1211×681 (16:9), renderizado em 2×. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=JetBrains+Mono:wght@700&display=block" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1211px; height: 681px; overflow: hidden; background: #FFF8EC; color: #1B1A24; font-family: 'Inter Tight', sans-serif; position: relative; }
+  canvas { position: absolute; inset: 0; }
+  .cloud { position: absolute; left: 50%; top: 300px; width: 230px; height: 230px; transform: translate(-50%, -50%); image-rendering: pixelated; }
+  .state { position: absolute; left: 50%; top: 392px; transform: translateX(-50%); font: 700 17px/1 'JetBrains Mono', monospace;
+           background: #1B1A24; color: #FFF8EC; padding: 10px 13px; white-space: nowrap; }
+  .chip { position: absolute; transform: translate(-50%, -50%); font-weight: 700; font-size: 21px; line-height: 1; padding: 11px 15px;
+          border: 2.5px solid #1B1A24; box-shadow: 5px 5px 0 #1B1A24; white-space: nowrap; }
+  .in { background: #FFFFFF; }
+  .out { background: #FFD23F; }
+  .brand { position: absolute; left: 50%; top: 62px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; white-space: nowrap; }
+  .brand b { font-size: 34px; font-weight: 800; letter-spacing: -0.045em; }
+  .brand span { font: 700 16px/1 'JetBrains Mono', monospace; color: #5A30D9; }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div class="brand"><b>lgnk</b><span>software sob medida para pequenas e médias empresas</span></div>
+  <img class="cloud" src="../dist/marca/simbolo-processando.svg" alt="" />
+  <span class="state">processando…</span>
+
+  <span class="chip in" style="left: 170px; top: 205px">pedido #312</span>
+  <span class="chip in" style="left: 235px; top: 330px">Pix recebido</span>
+  <span class="chip in" style="left: 160px; top: 470px">cliente esperando</span>
+  <span class="chip out" style="left: 1035px; top: 215px">venda ✓</span>
+  <span class="chip out" style="left: 980px; top: 330px">nota emitida ✓</span>
+  <span class="chip out" style="left: 1050px; top: 455px">cliente avisado ✓</span>
+
+<script>
+  // Fios de partículas como no topo do site: entram pela esquerda na cabeça da nuvem, saem retos pela direita.
+  const W = 1211, H = 681, dpr = 2, cx = W / 2, cy = 292, mw = 230;
+  const c = document.getElementById('c');
+  c.width = W * dpr; c.height = H * dpr; c.style.width = W + 'px'; c.style.height = H + 'px';
+  const g = c.getContext('2d'); g.scale(dpr, dpr);
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const bz = (a, b, d, e, t) => { const u = 1 - t; return u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * d + t * t * t * e; };
+  const IN = ['#7B4DFF', '#A98BFF', '#FFD23F', '#FF7A8A', '#1B1A24'];
+  const pin = (y0, t) => [bz(-8, W * 0.16, cx - mw * 0.75, cx - mw * 0.2, t), bz(y0, y0, cy + (y0 - cy) * 0.12, cy + (y0 - cy) * 0.04, t)];
+  const pout = (k, t) => { const y = cy + k * H, x0 = cx + mw * 0.3; return [bz(x0, x0 + mw * 0.5, cx + (W - cx) * 0.6, W + 8, t), bz(cy, cy, y, y, t)]; };
+  const streams = Array.from({ length: 20 }, (_, i) => H * (0.06 + 0.88 * (i / 19)));
+  const lanes = [-0.36, -0.18, 0, 0.18, 0.36];
+  g.fillStyle = '#1B1A24'; g.globalAlpha = 0.1;
+  for (const y of streams) for (let t = 0; t < 0.96; t += 0.016) { const [x, yy] = pin(y, t); g.fillRect(Math.round(x), Math.round(yy), 2, 2); }
+  for (const k of lanes) for (let t = 0.05; t < 1; t += 0.018) { const [x, yy] = pout(k, t); g.fillRect(Math.round(x), Math.round(yy), 2, 2); }
+  g.globalAlpha = 1;
+  for (let i = 0; i < 520; i++) {
+    const y = streams[Math.floor(rnd() * streams.length)] + (rnd() - 0.5) * 4, t = rnd() * 0.93;
+    const [x, yy] = pin(y, t), s = [2, 3, 3, 4, 5][Math.floor(rnd() * 5)];
+    g.globalAlpha = Math.min(1, t * 6); g.fillStyle = IN[Math.floor(rnd() * IN.length)]; g.fillRect(Math.round(x), Math.round(yy), s, s);
+  }
+  for (let i = 0; i < 90; i++) {
+    const k = lanes[Math.floor(rnd() * lanes.length)], t = 0.05 + rnd() * 0.95, [x, yy] = pout(k, t);
+    g.globalAlpha = 1; g.fillStyle = k === 0 ? '#FFD23F' : '#7B4DFF'; g.fillRect(Math.round(x), Math.round(yy), 4, 4);
+  }
+</script>
+</body>
+</html>
