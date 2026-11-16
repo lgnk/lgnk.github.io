@@ -15,7 +15,7 @@ const photo = Object.values(photos)[0]?.default;
       )
     }
     <div>
-      <p class="eyebrow">Quem está por trás</p>
+      <p class="label"><span aria-hidden="true">// </span>quem está por trás</p>
       <h2 class="name">Ian Langkammer</h2>
       <p class="role">Fundador</p>
       <p class="bio">
@@ -29,12 +29,13 @@ const photo = Object.values(photos)[0]?.default;
 <style>
   .about { display: grid; gap: 24px; align-items: start; }
   .monogram, .photo { width: 120px; height: 140px; object-fit: cover; }
+  .photo { border: var(--line); box-shadow: var(--shadow); }
   .monogram {
-    background: var(--rule); display: grid; place-items: center;
+    background: var(--yellow); border: var(--line); box-shadow: var(--shadow); display: grid; place-items: center;
     font-size: 40px; font-weight: 800; letter-spacing: 0.06em;
   }
   .name { font-size: clamp(26px, 3vw, 32px); font-weight: 700; letter-spacing: -0.02em; }
-  .role { color: var(--accent); font-weight: 600; margin-top: 2px; }
+  .role { color: var(--purple-ink); font-family: var(--font-mono); font-weight: 700; font-size: 14px; margin-top: 4px; }
   .bio { color: var(--muted); margin-top: 12px; max-width: 62ch; font-size: 17px; }
   @media (min-width: 768px) {
     .about { grid-template-columns: 160px 1fr; gap: 40px; }

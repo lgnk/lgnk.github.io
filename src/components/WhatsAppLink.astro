@@ -4,32 +4,19 @@ import { whatsappUrl } from '../lib/whatsapp';
 
 interface Props {
   label: string;
-  variant: 'solid' | 'underline' | 'footer';
+  /** solid: cabeçalho (pequeno, roxo) · primary: topo (grande, roxo) · footer: rodapé (amarelo) */
+  variant: 'solid' | 'primary' | 'footer';
 }
 
 const { label, variant } = Astro.props;
 const href = whatsappUrl(site.whatsapp.number, site.whatsapp.message);
+const classes = {
+  solid: 'btn btn--primary btn--sm',
+  primary: 'btn btn--primary',
+  footer: 'btn btn--alt',
+}[variant];
 ---
 
-<a data-whatsapp href={href} target="_blank" rel="noopener noreferrer" class:list={['wa', `wa--${variant}`]}>
+<a data-whatsapp href={href} target="_blank" rel="noopener noreferrer" class:list={['wa', classes]}>
   {label}<span class="sr-only"> (abre o WhatsApp em nova aba)</span>
 </a>
-
-<style>
-  .wa { font-weight: 600; text-decoration: none; white-space: nowrap; }
-  .wa--solid {
-    display: inline-block; background: var(--ink); color: var(--paper);
-    padding: 10px 16px; font-size: 15px;
-  }
-  .wa--solid:hover { background: var(--accent); }
-  .wa--underline {
-    display: inline-block; font-size: 17px; padding-bottom: 3px;
-    border-bottom: 2px solid var(--accent);
-  }
-  .wa--underline:hover { color: var(--accent); }
-  .wa--footer {
-    display: inline-block; background: var(--footer-text); color: var(--ink);
-    padding: 14px 20px; font-size: 17px; font-weight: 700;
-  }
-  .wa--footer:hover { background: var(--footer-accent); }
-</style>

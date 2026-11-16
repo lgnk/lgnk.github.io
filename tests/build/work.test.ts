@@ -10,7 +10,7 @@ describe('seção Trabalhos', () => {
   const items = [...section.querySelectorAll('li')];
 
   it('tem título e chamada', () => {
-    expect(text(section.querySelector('.eyebrow'))).toBe('Trabalhos');
+    expect(text(section.querySelector('.label'))).toBe('// trabalhos');
     expect(text(section.querySelector('h2'))).toBe('O que a gente já construiu.');
   });
 

@@ -1,12 +1,11 @@
 ---
+import Logo from './Logo.astro';
 import WhatsAppLink from './WhatsAppLink.astro';
 ---
 
 <header class="site-header">
   <div class="wrap bar">
-    <a href="/" class="wordmark" aria-label="LGNK Sistemas — início">
-      <span class="wm-main">LGNK</span><span class="wm-sub">SISTEMAS</span>
-    </a>
+    <Logo />
     <nav class="nav" aria-label="Principal">
       <a href="/#servicos">Serviços</a>
       <a href="/#trabalhos">Trabalhos</a>
@@ -18,14 +17,11 @@ import WhatsAppLink from './WhatsAppLink.astro';
 </header>
 
 <style>
-  .site-header { border-bottom: 1px solid var(--ink); }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 68px; }
-  .wordmark { display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none; }
-  .wm-main { font-weight: 800; font-size: 19px; letter-spacing: 0.14em; }
-  .wm-sub { font-weight: 500; font-size: 13px; letter-spacing: 0.06em; }
-  .nav { display: none; gap: 28px; font-size: 15px; margin-left: auto; }
+  .site-header { border-bottom: var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 72px; }
+  .nav { display: none; gap: 28px; font-size: 15px; font-weight: 600; margin-left: auto; }
   .nav a { text-decoration: none; }
-  .nav a:hover { color: var(--accent); }
+  .nav a:hover { color: var(--purple-ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
   @media (min-width: 768px) {
     .nav { display: flex; }
   }

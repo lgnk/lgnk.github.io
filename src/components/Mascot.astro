@@ -1,0 +1,7 @@
+---
+import { mascotSvg, type MascotOptions } from '../lib/mascot';
+
+type Props = MascotOptions;
+---
+
+<Fragment set:html={mascotSvg(Astro.props)} />

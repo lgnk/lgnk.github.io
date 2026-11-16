@@ -17,7 +17,7 @@ const faqs = [
 
 <section id="perguntas" class="section">
   <div class="wrap">
-    <h2 class="eyebrow">Perguntas frequentes</h2>
+    <h2 class="label"><span aria-hidden="true">// </span>perguntas frequentes</h2>
     <dl class="faq">
       {
         faqs.map((f) => (
@@ -33,7 +33,7 @@ const faqs = [
 
 <style>
   .faq { display: grid; gap: 0 48px; margin-top: 8px; }
-  .item { border-top: 1px solid var(--ink); padding: 18px 0 22px; }
+  .item { border-top: var(--line); padding: 18px 0 22px; }
   dt { font-weight: 700; font-size: 18px; }
   dd { color: var(--muted); margin-top: 6px; }
   @media (min-width: 768px) {

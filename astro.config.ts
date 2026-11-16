@@ -16,13 +16,13 @@ export default defineConfig({
       fallbacks: ['system-ui', 'sans-serif'],
     },
     {
-      name: 'Instrument Serif',
-      cssVariable: '--font-serif',
+      name: 'JetBrains Mono',
+      cssVariable: '--font-mono',
       provider: fontProviders.fontsource(),
-      weights: [400],
-      styles: ['italic'],
+      weights: [500, 700],
+      styles: ['normal'],
       subsets: ['latin'],
-      fallbacks: ['Georgia', 'serif'],
+      fallbacks: ['ui-monospace', 'monospace'],
     },
   ],
 });
