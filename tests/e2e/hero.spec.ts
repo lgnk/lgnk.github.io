@@ -66,3 +66,14 @@ test('mascote inteiro dentro do palco em 320 px', async ({ page }) => {
   expect(m!.y).toBeGreaterThanOrEqual(s!.y);
   expect(m!.y + m!.height).toBeLessThanOrEqual(s!.y + s!.height);
 });
+
+test('ligar o movimento reduzido com a página aberta para a animação', async ({ page }) => {
+  await page.goto('/');
+  const stage = page.locator('#heroStage');
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute('data-running', 'true');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(stage).toHaveAttribute('data-motion', 'static');
+  await expect(stage).toHaveAttribute('data-running', 'false');
+  expect(await page.evaluate(() => (document.getElementById('heroMascot') as unknown as SVGSVGElement).animationsPaused())).toBe(true);
+});

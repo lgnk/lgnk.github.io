@@ -117,7 +117,7 @@ export function mascotSvg(options: MascotOptions = {}): string {
     'xmlns="http://www.w3.org/2000/svg"',
     `viewBox="${escape(viewBox)}"`,
     'shape-rendering="crispEdges"',
-    `class="${['mascot', className].filter(Boolean).join(' ')}"`,
+    `class="${escape(['mascot', className].filter(Boolean).join(' '))}"`,
     'data-state="idle"',
     id ? `id="${escape(id)}"` : '',
     title ? 'role="img"' : 'aria-hidden="true" focusable="false"',
@@ -126,8 +126,8 @@ export function mascotSvg(options: MascotOptions = {}): string {
   const bg = !background
     ? ''
     : background.shape === 'square'
-      ? `<rect x="0" y="0" width="120" height="120" fill="${background.color}"/>`
-      : `<circle cx="60" cy="60" r="60" fill="${background.color}"/>`;
+      ? `<rect x="0" y="0" width="120" height="120" fill="${escape(background.color)}"/>`
+      : `<circle cx="60" cy="60" r="60" fill="${escape(background.color)}"/>`;
 
   const bounce = animated
     ? '<animateTransform attributeName="transform" type="translate" values="0 0;0 -3;0 0;0 0" keyTimes="0;.2;.4;1" dur="1.6s" calcMode="discrete" repeatCount="indefinite"/>'

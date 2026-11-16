@@ -45,7 +45,8 @@ test('foco visível', async ({ page }) => {
     });
     if (!info) continue;
     expect(['a', 'button', 'summary'], info.label).toContain(info.tag);
-    expect(info.outline !== 'none' || info.shadow !== 'none', `sem foco visível: ${info.label}`).toBe(true);
+    // Botões têm sombra dura fixa, então só o contorno prova que o foco aparece.
+    expect(info.outline, `sem foco visível: ${info.label}`).not.toBe('none');
     if (info.heroWhatsApp) reachedHeroWhatsApp = true;
   }
   expect(reachedHeroWhatsApp).toBe(true);

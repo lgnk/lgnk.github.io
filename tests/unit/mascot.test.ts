@@ -38,6 +38,13 @@ describe('mascotSvg', () => {
     for (const a of anims) expect(a).toContain('begin="indefinite"');
   });
 
+  it('escapa classe e cor de fundo', () => {
+    const s = mascotSvg({ className: 'a"b', background: { color: '#fff" onload="x', shape: 'square' } });
+    expect(s).toContain('class="mascot a&quot;b"');
+    expect(s).toContain('fill="#fff&quot; onload=&quot;x"');
+    expect(s).not.toContain('onload="x"');
+  });
+
   it('escapa o título', () => {
     expect(mascotSvg({ title: 'a < b & "c"' })).toContain('<title>a &lt; b &amp; &quot;c&quot;</title>');
   });
