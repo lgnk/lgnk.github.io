@@ -9,7 +9,7 @@ import Mascot from './Mascot.astro';
 <div id="loader" class="loader" aria-hidden="true">
   <div class="loader-box">
     <Mascot animated manualStart states={['proc']} state="proc" className="loader-cloud" />
-    <span class="loader-label">carregando…</span>
+    <span class="loader-label">carregando<span class="loader-cursor">_</span></span>
   </div>
 </div>
 <noscript><style>#loader { display: none; }</style></noscript>
@@ -24,12 +24,32 @@ import Mascot from './Mascot.astro';
     background: var(--cream); animation: loader-in 0.2s ease-out 0.4s both;
   }
   .loader-box { display: grid; justify-items: center; gap: 4px; }
-  .loader :global(.loader-cloud) { width: 132px; height: 132px; }
   .loader-label { font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px; }
-  .loader.loader--out { opacity: 0; transition: opacity 0.2s ease-out; }
+  .loader :global(.loader-cloud) { width: 132px; height: 132px; }
   @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes loader-out { to { opacity: 0; } }
+
+  /* Fliperama: a nuvem cai em 4 quadros, depois flutua em 2; o cursor pisca. */
+  @media (prefers-reduced-motion: no-preference) {
+    .loader :global(.loader-cloud) {
+      animation: loader-drop 0.32s steps(4, end) 0.4s both, loader-bob 1s steps(1, end) 0.72s infinite;
+    }
+    .loader-cursor { animation: loader-blink 1s steps(1, end) infinite; }
+  }
+  @keyframes loader-drop { from { translate: 0 -36px; } to { translate: 0 0; } }
+  @keyframes loader-bob { 50% { translate: 0 -4px; } }
+  @keyframes loader-blink { 50% { opacity: 0; } }
+
+  /* Saída: a tela fecha em 8 persianas, em 6 quadros, e mostra o site por trás. */
+  @property --wipe { syntax: '<percentage>'; inherits: false; initial-value: 100%; }
+  .loader.loader--out {
+    -webkit-mask: linear-gradient(#000 var(--wipe), transparent var(--wipe)) 0 0 / 100% 12.5%;
+    mask: linear-gradient(#000 var(--wipe), transparent var(--wipe)) 0 0 / 100% 12.5%;
+    animation: loader-wipe 0.36s steps(6, end) both;
+  }
+  @keyframes loader-wipe { from { --wipe: 100%; } to { --wipe: 0%; } }
   @media (prefers-reduced-motion: reduce) {
     .loader { animation-duration: 0s; }
-    .loader.loader--out { transition: none; }
+    .loader.loader--out { -webkit-mask: none; mask: none; animation: loader-out 0.2s ease-out both; }
   }
 </style>

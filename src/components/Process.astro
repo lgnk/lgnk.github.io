@@ -11,12 +11,12 @@ const steps: { icon: ProcessIcon; title: string; text: string }[] = [
 
 <section id="como-trabalhamos" class="section">
   <div class="wrap">
-    <p class="label"><span aria-hidden="true">// </span>processo</p>
-    <h2 class="section-title">Sem surpresa no meio do caminho.</h2>
+    <p class="label" data-reveal><span aria-hidden="true">// </span>processo</p>
+    <h2 class="section-title" data-reveal style="--i: 1">Sem surpresa no meio do caminho.</h2>
     <ol class="grid4">
       {
         steps.map((s, i) => (
-          <li>
+          <li data-reveal style={`--i: ${i}`}>
             <Fragment set:html={pixelIconSvg(s.icon)} />
             <h3><span class="num">{i + 1}</span> {s.title}</h3>
             <p>{s.text}</p>

@@ -15,12 +15,13 @@ const photo = Object.values(photos)[0]?.default;
           sizes="(min-width: 768px) 280px, 240px"
           alt="Ian Langkammer, fundador da LGNK, programando no notebook"
           class="photo"
+          data-reveal
         />
       ) : (
-        <div class="monogram" aria-hidden="true">IL</div>
+        <div class="monogram" aria-hidden="true" data-reveal>IL</div>
       )
     }
-    <div>
+    <div data-reveal style="--i: 1">
       <p class="label"><span aria-hidden="true">// </span>quem está por trás</p>
       <h2 class="name">Ian Langkammer</h2>
       <p class="role">Fundador</p>

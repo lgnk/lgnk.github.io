@@ -87,14 +87,16 @@ const jsonLd = {
         // Só fica inerte quando a nuvem aparece de verdade (depois de 0,4 s). Com internet boa, nada muda.
         function block() { if (!gone) behind.forEach(function (el) { el.inert = true; }); }
         if (getComputedStyle(loader).opacity !== '0') block();
-        else loader.addEventListener('animationstart', block);
+        // Só a animação da própria tela conta: as da nuvem e do cursor (filhos) também disparam este evento.
+        else loader.addEventListener('animationstart', function (e) { if (e.target === loader) block(); });
         function hide() {
           if (gone) return;
           gone = true;
           behind.forEach(function (el) { el.inert = false; });
-          var visible = getComputedStyle(loader).opacity !== '0';
+          // Se a nuvem nem chegou a aparecer, sai na hora; se apareceu, fecha as persianas antes de sair.
+          if (getComputedStyle(loader).opacity === '0') return loader.remove();
           loader.classList.add('loader--out');
-          setTimeout(function () { loader.remove(); }, visible ? 220 : 0);
+          setTimeout(function () { loader.remove(); }, 400);
         }
         var cap = setTimeout(hide, 2500);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { clearTimeout(cap); hide(); });
