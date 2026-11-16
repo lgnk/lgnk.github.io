@@ -32,11 +32,11 @@ const photo = Object.values(photos)[0]?.default;
   .photo { border: var(--line); box-shadow: var(--shadow); }
   .monogram {
     background: var(--yellow); border: var(--line); box-shadow: var(--shadow); display: grid; place-items: center;
-    font-size: 40px; font-weight: 800; letter-spacing: 0.06em;
+    font-size: 2.5rem; font-weight: 800; letter-spacing: 0.06em;
   }
-  .name { font-size: clamp(26px, 3vw, 32px); font-weight: 700; letter-spacing: -0.02em; }
-  .role { color: var(--purple-ink); font-family: var(--font-mono); font-weight: 700; font-size: 14px; margin-top: 4px; }
-  .bio { color: var(--muted); margin-top: 12px; max-width: 62ch; font-size: 17px; }
+  .name { font-size: clamp(1.625rem, 1rem + 1.3vw, 2rem); font-weight: 700; letter-spacing: -0.02em; }
+  .role { color: var(--purple-ink); font-family: var(--font-mono); font-weight: 700; font-size: var(--text-sm); margin-top: 4px; }
+  .bio { color: var(--muted); margin-top: 12px; max-width: 62ch; font-size: var(--text-lead); }
   @media (min-width: 768px) {
     .about { grid-template-columns: 160px 1fr; gap: 40px; }
     .monogram, .photo { width: 160px; height: 190px; }

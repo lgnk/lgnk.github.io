@@ -10,6 +10,16 @@
   --coral: #FF7A8A;
   --white: #FFFFFF;
   --footer-small: #B9B3C4;
+  --ink-line: #3A3846;
+
+  /* Escala de texto em rem: acompanha a fonte que a pessoa escolheu no navegador ou no celular. */
+  --text-micro: 0.75rem;   /* 12: legendas em mono (estado da nuvem, carregando) */
+  --text-xs: 0.8125rem;    /* 13: etiquetas */
+  --text-sm: 0.875rem;     /* 14: rótulos, letras miúdas */
+  --text-ui: 0.9375rem;    /* 15: navegação, banner, legendas de números */
+  --text-base: 1rem;       /* 16: texto corrido */
+  --text-lead: 1.125rem;   /* 18: abertura, perguntas, bio */
+  --text-h3: 1.25rem;      /* 20: títulos de cartão */
 
   --line: 2px solid var(--ink);
   --shadow: 4px 4px 0 var(--ink);
@@ -30,13 +40,14 @@ body {
   background: var(--cream);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: var(--text-base);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+p, dd { text-wrap: pretty; }
 ul, ol { padding: 0; list-style: none; }
 img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; }
@@ -56,24 +67,25 @@ button { font: inherit; color: inherit; }
 .skip-link:focus { top: 12px; }
 
 :focus-visible { outline: 3px solid var(--purple-ink); outline-offset: 3px; }
+::selection { background: var(--yellow); color: var(--ink); }
 
 /* Palavra de destaque dos títulos: marca-texto amarelo */
 mark { background: var(--yellow); color: var(--ink); padding: 0 0.1em; }
 
 /* Rótulo de seção, como comentário de código: // trabalhos */
 .label {
-  font-family: var(--font-mono); font-size: 14px; font-weight: 700; letter-spacing: 0.02em;
+  font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 700; letter-spacing: 0.02em;
   color: var(--purple-ink); margin-bottom: 14px;
 }
 
 /* Botões com borda e sombra dura */
 .btn {
-  display: inline-block; font-weight: 700; font-size: 16px; line-height: 1.1; text-decoration: none;
+  display: inline-block; font-weight: 700; font-size: var(--text-base); line-height: 1.1; text-decoration: none;
   padding: 14px 18px; border: var(--line); box-shadow: var(--shadow); white-space: nowrap; cursor: pointer;
 }
 .btn--primary { background: var(--purple); color: var(--white); }
 .btn--alt { background: var(--yellow); color: var(--ink); }
-.btn--sm { font-size: 14px; padding: 9px 13px; box-shadow: var(--shadow-sm); }
+.btn--sm { font-size: var(--text-sm); padding: 9px 13px; box-shadow: var(--shadow-sm); }
 @media (prefers-reduced-motion: no-preference) {
   .btn { transition: transform 0.08s, box-shadow 0.08s; }
   .btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
@@ -90,7 +102,7 @@ mark { background: var(--yellow); color: var(--ink); padding: 0 0.1em; }
 /* Blocos de seção */
 .section { border-bottom: var(--line); padding-block: clamp(48px, 7vw, 88px); }
 .section-title {
-  font-size: clamp(30px, 4.4vw, 44px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.04;
+  font-size: clamp(1.875rem, 0.4rem + 3.9vw, 2.75rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.04;
   max-width: 22ch;
   text-wrap: balance;
 }
@@ -98,7 +110,7 @@ mark { background: var(--yellow); color: var(--ink); padding: 0 0.1em; }
 /* Grade de 4 cartões (serviços, processo) */
 .grid4 { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 40px; }
 .grid4 > li { padding: 22px 22px 26px; background: var(--white); border: var(--line); box-shadow: var(--shadow); }
-.grid4 h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; }
+.grid4 h3 { font-size: var(--text-h3); font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; }
 .grid4 p { color: var(--muted); margin-top: 8px; }
 @media (min-width: 768px) {
   .grid4 { grid-template-columns: repeat(2, 1fr); gap: 22px; }

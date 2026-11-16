@@ -3,6 +3,8 @@
  * tudo sai desta função, que devolve o SVG em texto. Grade de 6 unidades num quadro de 120×120.
  */
 
+import { PALETTE } from './palette';
+
 export type MascotState = 'idle' | 'proc' | 'done';
 
 export interface MascotOptions {
@@ -23,14 +25,7 @@ export interface MascotOptions {
   className?: string;
 }
 
-const C = {
-  purple: '#7B4DFF',
-  purpleInk: '#5A30D9',
-  purpleLight: '#A98BFF',
-  coral: '#FF7A8A',
-  yellow: '#FFD23F',
-  ink: '#1B1A24',
-} as const;
+const C = PALETTE;
 
 type Rect = [x: number, y: number, w: number, h: number, fill: string, extra?: string];
 

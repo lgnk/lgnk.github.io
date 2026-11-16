@@ -7,15 +7,9 @@
  */
 import { bezier, frameScale, headPosition, nextState, particleBudget, room, stagePoint, streamYs } from '../lib/flow';
 import type { MascotState } from '../lib/mascot';
+import { PALETTE } from '../lib/palette';
 
-const C = {
-  ink: '#1B1A24',
-  purple: '#7B4DFF',
-  purpleLight: '#A98BFF',
-  yellow: '#FFD23F',
-  coral: '#FF7A8A',
-  white: '#FFFFFF',
-};
+const C = PALETTE;
 const IN_COLORS = [C.purple, C.purpleLight, C.yellow, C.coral, C.ink];
 const SIZES = [2, 2, 3, 3, 4, 5];
 const INS = ['pedido #312', 'Pix recebido', 'nova mensagem', 'estoque?', 'planilha.xlsx', 'agenda', 'maquininha', 'cliente esperando'];

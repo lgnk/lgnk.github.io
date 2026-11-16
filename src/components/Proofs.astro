@@ -26,8 +26,8 @@ const proofs = [
     display: grid; grid-template-columns: 7.5rem 1fr; align-items: baseline; gap: 12px; padding: 16px 18px;
     background: var(--white); border: var(--line); box-shadow: var(--shadow-sm);
   }
-  .value { font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; letter-spacing: -0.03em; white-space: nowrap; }
-  .proof-label { color: var(--muted); font-size: 15px; }
+  .value { font-size: clamp(1.875rem, 0.8rem + 2.2vw, 2.5rem); font-weight: 700; letter-spacing: -0.03em; white-space: nowrap; }
+  .proof-label { color: var(--muted); font-size: var(--text-ui); }
   @media (min-width: 768px) {
     .proofs { padding-block: 36px; }
     .proofs-grid { grid-template-columns: repeat(3, 1fr); gap: 22px; }

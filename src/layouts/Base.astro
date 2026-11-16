@@ -79,10 +79,16 @@ const jsonLd = {
       (function () {
         var loader = document.getElementById('loader');
         if (!loader) return;
+        // Enquanto a nuvem está na frente, o resto da página não recebe foco nem clique.
+        var behind = Array.prototype.filter.call(document.body.children, function (el) {
+          return el !== loader && el.tagName !== 'SCRIPT' && el.tagName !== 'NOSCRIPT';
+        });
+        behind.forEach(function (el) { el.inert = true; });
         var gone = false;
         function hide() {
           if (gone) return;
           gone = true;
+          behind.forEach(function (el) { el.inert = false; });
           var visible = getComputedStyle(loader).opacity !== '0';
           loader.classList.add('loader--out');
           setTimeout(function () { loader.remove(); }, visible ? 220 : 0);

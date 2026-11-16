@@ -58,3 +58,11 @@ test('WhatsApp à vista no celular', async ({ page }, testInfo) => {
   await page.goto('/');
   await expect(page.locator('header a[data-whatsapp]')).toBeInViewport();
 });
+
+test('links do rodapé confortáveis ao toque', async ({ page }) => {
+  await page.goto('/');
+  for (const name of ['Política de privacidade']) {
+    const box = await page.getByRole('link', { name }).boundingBox();
+    expect(box!.height, name).toBeGreaterThanOrEqual(44);
+  }
+});

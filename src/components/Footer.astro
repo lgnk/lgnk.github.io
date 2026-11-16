@@ -29,13 +29,13 @@ import WhatsAppLink from './WhatsAppLink.astro';
 
 <style>
   .site-footer { background: var(--ink); color: var(--cream); padding-block: clamp(56px, 8vw, 96px) 32px; }
-  .cta { font-size: clamp(32px, 5vw, 56px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; max-width: 18ch; }
-  .contact { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; margin-top: 32px; font-size: 17px; }
+  .cta { font-size: clamp(2rem, 0.6rem + 4.2vw, 3.5rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; max-width: 18ch; }
+  .contact { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; margin-top: 32px; font-size: var(--text-lead); }
   .contact-link { text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
-  .legal { margin-top: 56px; padding-top: 20px; border-top: 2px solid #3A3846; font-size: 14px; color: var(--footer-small); display: grid; gap: 10px; }
-  .legal-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
-  .legal-links a, .legal-links button { color: var(--footer-small); text-decoration: underline; text-underline-offset: 3px; }
-  .legal-links button { background: none; border: 0; padding: 0; cursor: pointer; }
+  .legal { margin-top: 56px; padding-top: 20px; border-top: 2px solid var(--ink-line); font-size: var(--text-sm); color: var(--footer-small); display: grid; gap: 10px; }
+  .legal-links { display: flex; flex-wrap: wrap; gap: 0 24px; }
+  .legal-links a, .legal-links button { display: inline-block; min-height: 44px; padding-block: 11px; color: var(--footer-small); text-decoration: underline; text-underline-offset: 3px; }
+  .legal-links button { background: none; border: 0; padding-inline: 0; cursor: pointer; }
   .site-footer :focus-visible { outline-color: var(--yellow); }
   .site-footer .btn { border-color: var(--yellow); box-shadow: 4px 4px 0 var(--purple); }
 </style>

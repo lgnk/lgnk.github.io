@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { PALETTE } from '../../src/lib/palette';
 
 const css = readFileSync(new URL('../../src/styles/global.css', import.meta.url), 'utf8');
 const root = css.match(/:root\s*{([^}]*)}/)?.[1] ?? '';
@@ -17,6 +18,7 @@ const TOKENS = {
   '--yellow': '#FFD23F',
   '--coral': '#FF7A8A',
   '--footer-small': '#B9B3C4',
+  '--ink-line': '#3A3846',
 };
 
 /** Hex de um token (ou o próprio hex). */
@@ -50,5 +52,23 @@ describe('paleta Fliperama', () => {
     ['--footer-small', '--ink'],
   ])('texto %s sobre %s passa AA', (fg, bg) => {
     expect(contrast(resolve(fg), resolve(bg))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('o CSS e o TypeScript (nuvem e animação) usam a mesma paleta', () => {
+    const pairs: [string, string][] = [
+      ['--purple', PALETTE.purple],
+      ['--purple-ink', PALETTE.purpleInk],
+      ['--purple-light', PALETTE.purpleLight],
+      ['--yellow', PALETTE.yellow],
+      ['--coral', PALETTE.coral],
+      ['--ink', PALETTE.ink],
+      ['--cream', PALETTE.cream],
+    ];
+    for (const [token, hex] of pairs) expect(tokens[token]?.toUpperCase(), token).toBe(hex.toUpperCase());
+  });
+
+  it('nenhum componente usa cor fora dos tokens', () => {
+    const footer = readFileSync(new URL('../../src/components/Footer.astro', import.meta.url), 'utf8');
+    expect(footer).not.toMatch(/#[0-9a-fA-F]{6}\b/);
   });
 });

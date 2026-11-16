@@ -41,4 +41,13 @@ describe('seção Trabalhos', () => {
       expect((imgs[0].getAttribute('alt') ?? '').trim()).not.toBe('');
     }
   });
+
+  it('as fotos vêm em vários tamanhos, para ficarem nítidas no celular sem pesar', () => {
+    for (const li of items) {
+      const img = li.querySelector('img')!;
+      const widths = (img.getAttribute('srcset') ?? '').split(',').map((c) => c.trim().split(' ')[1]);
+      expect(widths).toEqual(['480w', '800w', '1200w']);
+      expect(img.getAttribute('sizes')).toBe('(min-width: 1240px) 400px, (min-width: 768px) 34vw, calc(100vw - 32px)');
+    }
+  });
 });

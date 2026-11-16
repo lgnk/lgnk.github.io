@@ -25,7 +25,7 @@ import Mascot from './Mascot.astro';
   }
   .loader-box { display: grid; justify-items: center; gap: 4px; }
   .loader :global(.loader-cloud) { width: 132px; height: 132px; }
-  .loader-label { font: 700 13px/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px; }
+  .loader-label { font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px; }
   .loader.loader--out { opacity: 0; transition: opacity 0.2s ease-out; }
   @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
   @media (prefers-reduced-motion: reduce) {
