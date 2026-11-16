@@ -160,8 +160,8 @@ mark { background: var(--yellow); color: var(--ink); padding: 0 0.1em; }
   Entradas e saídas das seções. scripts/reveal.ts marca cada [data-reveal] com data-reveal-state:
   "in" (chegou na faixa do meio da tela), "above" (saiu pelo alto) ou nada/"below" (ainda não chegou).
   O valor de data-reveal diz de onde o item parte; --i atrasa os vizinhos de um grupo.
-  É tudo transição, então dá para interromper e voltar. Sem .reveal-on (sem script, sem
-  IntersectionObserver ou com movimento reduzido) nada se esconde.
+  É tudo transição, então dá para interromper e voltar. Sem .reveal-on (sem script ou com
+  movimento reduzido) nada se esconde.
 */
 @property --blinds { syntax: '<percentage>'; inherits: true; initial-value: 100%; }
 
@@ -184,14 +184,10 @@ main > section, .site-footer { overflow-x: clip; }
 .reveal-on [data-reveal="pop"]:not([data-reveal-state="in"], [data-reveal-state="above"]) {
   translate: 0 36px; scale: 0.9; box-shadow: 0 0 0 var(--ink);
 }
-/*
-  Recortes de partida sempre deixam 1% do item dentro: o Chrome usa o clip-path do próprio item para
-  decidir se ele está na tela, e um recorte vazio faria o item nunca entrar.
-*/
 /* Título sobe de dentro de uma fenda (o recorte fica, o texto sobe). */
 .reveal-on [data-reveal="title"] { clip-path: inset(-25% -10% -25% -10%); }
 .reveal-on [data-reveal="title"]:not([data-reveal-state="in"], [data-reveal-state="above"]) {
-  opacity: 1; clip-path: inset(99% -10% -25% -10%); translate: 0 0.55em;
+  opacity: 1; clip-path: inset(100% -10% -25% -10%); translate: 0 0.55em;
 }
 /* Rótulo "// ..." é digitado, um bloco de cada vez (aparece na hora e o recorte anda em degraus). */
 .reveal-on [data-reveal="type"] {
@@ -200,7 +196,7 @@ main > section, .site-footer { overflow-x: clip; }
   transition-timing-function: step-start, var(--ease-out), var(--ease-out), steps(14, end), var(--ease-out), var(--ease-out);
 }
 .reveal-on [data-reveal="type"]:not([data-reveal-state="in"], [data-reveal-state="above"]) {
-  clip-path: inset(-25% 99% -25% -10%);
+  clip-path: inset(-25% 100% -25% -10%);
 }
 /* Foto entra em persianas pixeladas, como a tela de carregamento: a moldura já está lá. */
 .reveal-on [data-reveal="blinds"] { transition-timing-function: steps(6, end); transition-duration: 600ms; }

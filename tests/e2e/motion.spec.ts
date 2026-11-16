@@ -151,3 +151,19 @@ test('todo item com entrada aparece quando chega no meio da tela', async ({ page
   }
   expect(stuck).toEqual([]);
 });
+
+test('o topo cabe na primeira tela com os dois botões, inclusive em tela baixa', async ({ page }) => {
+  for (const [width, height] of [[1000, 521], [1280, 600], [1366, 660], [1440, 780], [1920, 950], [375, 667], [390, 844]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    const size = `${width}×${height}`;
+    for (const sel of ['#topo .hero-title', '#topo .hero-sub', '#topo .hero-actions']) {
+      await expect.poll(() => state(page, sel), { message: `${size} ${sel}` }).toBe('in');
+    }
+    await expect.poll(() => opacity(page, '#topo .hero-actions'), { message: size }).toBeGreaterThan(0.95);
+    const bottoms = await page.evaluate(() =>
+      ['#topo a[data-whatsapp]', '#topo .hero-more'].map((s) => document.querySelector(s)!.getBoundingClientRect().bottom),
+    );
+    for (const b of bottoms) expect(b, size).toBeLessThanOrEqual(height);
+  }
+});

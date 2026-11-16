@@ -41,12 +41,13 @@ import WhatsAppLink from './WhatsAppLink.astro';
   .hero-grid { display: grid; padding-inline: 0; }
   .hero-copy { padding: clamp(40px, 7vw, 72px) var(--gutter) 36px; align-self: center; }
   .nowrap { white-space: nowrap; }
+  /* Título, espaços e palco acompanham também a altura da tela: em tela baixa, o topo inteiro (com os botões) cabe nela. */
   .hero-title {
-    font-size: clamp(2.5rem, 0.5rem + 5.6vw, 5rem); font-weight: 800; letter-spacing: -0.045em; line-height: 0.98;
+    font-size: clamp(2.5rem, min(0.5rem + 5.6vw, 0.5rem + 8.4svh), 5rem); font-weight: 800; letter-spacing: -0.045em; line-height: 0.98;
     max-width: 12ch;
   }
-  .hero-sub { margin-top: 20px; max-width: 42ch; font-size: var(--text-lead); color: var(--muted); }
-  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin-top: 28px; }
+  .hero-sub { margin-top: clamp(12px, 2.4svh, 20px); max-width: 42ch; font-size: var(--text-lead); color: var(--muted); }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: clamp(16px, 3.2svh, 28px); }
   .hero-more {
     display: inline-flex; align-items: center; min-height: 44px; font-weight: 700;
     text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px;
@@ -70,11 +71,12 @@ import WhatsAppLink from './WhatsAppLink.astro';
     font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 7px 9px; white-space: nowrap;
   }
   @media (min-width: 900px) {
-    .hero-grid { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); padding-inline: 0; }
-    .hero-copy { padding-left: var(--gutter); padding-right: 40px; }
+    /* Coluna do texto larga o bastante para os dois botões lado a lado a partir de 1000 px. */
+    .hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); padding-inline: 0; }
+    .hero-copy { padding: clamp(24px, 6svh, 72px) 32px clamp(20px, 4svh, 36px) var(--gutter); }
     /* O texto fica na coluna do site; o palco passa da coluna e vai até a borda direita, onde as linhas saem. */
     .hero-stage {
-      height: auto; min-height: 480px; border-top: 0; border-left: var(--line);
+      height: auto; min-height: min(480px, calc(100svh - 76px)); border-top: 0; border-left: var(--line);
       margin-right: calc(-1 * max(0px, (100cqw - var(--maxw)) / 2));
     }
     .hero-stage :global(.hero-mascot) { width: 176px; height: 176px; }
