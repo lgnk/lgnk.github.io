@@ -24,7 +24,8 @@ import Mascot from './Mascot.astro';
     background: var(--cream); animation: loader-in 0.2s ease-out 0.4s both;
   }
   .loader-box { display: grid; justify-items: center; gap: 4px; }
-  .loader-label { font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px; }
+  /* O cursor "_" ocupa 1ch à direita; 1ch a mais à esquerda deixa a palavra centrada sob os pontinhos da nuvem. */
+  .loader-label { font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px 8px calc(10px + 1ch); }
   .loader :global(.loader-cloud) { width: 132px; height: 132px; }
   @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
   @keyframes loader-out { to { opacity: 0; } }

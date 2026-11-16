@@ -64,6 +64,15 @@ const jsonLd = {
     <Font cssVariable="--font-mono" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      // Entradas das seções: liga antes da primeira pintura, para os itens já nascerem no ponto de partida.
+      // Se o script das entradas (scripts/reveal.ts) não avisar em 3 s, desliga e mostra tudo parado.
+      (function (html) {
+        if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        html.classList.add('reveal-on');
+        setTimeout(function () { if (!window.__lgnkReveal) html.classList.remove('reveal-on'); }, 3000);
+      })(document.documentElement);
+    </script>
   </head>
   <body>
     <Loader />
@@ -104,6 +113,7 @@ const jsonLd = {
       })();
     </script>
     <script>
+      import '../scripts/reveal';
       import '../scripts/site';
     </script>
   </body>

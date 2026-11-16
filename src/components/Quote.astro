@@ -14,14 +14,14 @@ const groups = [
 <section id="orcamento" class="section quote">
   <div class="wrap quote-grid">
     <div>
-      <h2 class="section-title" data-reveal>Peça seu orçamento pelo WhatsApp</h2>
-      <p class="quote-lead" data-reveal style="--i: 1">Marque o que você precisa. A nuvem monta a mensagem e você só toca em enviar.</p>
+      <h2 class="section-title" data-reveal="title">Peça seu orçamento pelo WhatsApp</h2>
+      <p class="quote-lead" data-reveal="up" style="--i: 1">Marque o que você precisa. A nuvem monta a mensagem e você só toca em enviar.</p>
 
       <!-- O montador só aparece com JavaScript; sem ele, o botão abre o WhatsApp com um roteiro em branco. -->
       <form class="quote-form" data-quote-builder data-clarity-mask="true" hidden>
         {
           groups.map((g) => (
-            <fieldset data-reveal>
+            <fieldset data-reveal="up">
               <legend>{g.legend}</legend>
               {g.hint && <p class="quote-hint">{g.hint}</p>}
               <div class="chips">
@@ -35,11 +35,11 @@ const groups = [
             </fieldset>
           ))
         }
-        <div class="field" data-reveal>
+        <div class="field" data-reveal="up">
           <label for="quote-business">Seu negócio</label>
           <input id="quote-business" name="business" type="text" maxlength="80" autocomplete="organization" placeholder="Ex.: loja de roupas em BH" />
         </div>
-        <fieldset data-reveal>
+        <fieldset data-reveal="up">
           <legend>Pra quando?</legend>
           <div class="chips">
             {
@@ -56,7 +56,7 @@ const groups = [
     </div>
 
     <div class="quote-side">
-      <div class="quote-card" data-reveal style="--i: 1">
+      <div class="quote-card" data-reveal="zoom" style="--i: 1">
         <div class="quote-card-head">
           <Mascot animated manualStart states={['idle', 'proc', 'done']} id="quoteMascot" className="quote-cloud" />
           <span class="quote-status" data-quote-status aria-hidden="true">esperando seu pedido_</span>
@@ -75,7 +75,7 @@ const groups = [
           Enviar pelo WhatsApp →<span class="sr-only"> (abre o WhatsApp em nova aba)</span>
         </a>
       </div>
-      <ul class="quote-facts" data-reveal style="--i: 2">
+      <ul class="quote-facts" data-reveal="up" style="--i: 2">
         <li><strong>Resposta em até 1 dia útil.</strong> Sem compromisso.</li>
         <li><strong>Você fala direto com quem constrói.</strong></li>
         <li>Proposta com escopo, prazo e valor fechados <strong>por escrito</strong> depois de entender o seu caso.</li>

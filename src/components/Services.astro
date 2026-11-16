@@ -27,12 +27,12 @@ const services: { icon: ServiceIcon; title: string; text: string }[] = [
 
 <section id="servicos" class="section">
   <div class="wrap">
-    <p class="label" data-reveal><span aria-hidden="true">// </span>o que fazemos</p>
-    <h2 class="section-title" data-reveal style="--i: 1">O que a gente resolve.</h2>
+    <p class="label" data-reveal="type"><span aria-hidden="true">// </span>o que fazemos</p>
+    <h2 class="section-title" data-reveal="title" style="--i: 1">O que a gente resolve.</h2>
     <ul class="grid4">
       {
         services.map((s, i) => (
-          <li data-reveal style={`--i: ${i}`}>
+          <li data-reveal="pop" style={`--i: ${i}`}>
             <Fragment set:html={pixelIconSvg(s.icon, 'service-icon')} />
             <h3>{s.title}</h3>
             <p>{s.text}</p>
@@ -40,7 +40,7 @@ const services: { icon: ServiceIcon; title: string; text: string }[] = [
         ))
       }
     </ul>
-    <div class="unsure" data-reveal>
+    <div class="unsure" data-reveal="up">
       <p>Não sabe se precisa de site, app ou sistema? Conta o problema que a gente diz o que resolve.</p>
       <a class="btn btn--alt" href="#orcamento">Montar meu orçamento →</a>
     </div>

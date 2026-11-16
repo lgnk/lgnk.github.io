@@ -89,3 +89,17 @@ test('com movimento reduzido a nuvem não pula nem flutua', async ({ page }) => 
   await visible(page);
   expect(await page.locator('#loader .loader-cloud').evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
 });
+
+test('a palavra "carregando" fica centrada sob os três pontinhos da nuvem', async ({ page }) => {
+  await slowFonts(page, 2500);
+  await page.goto('/', { waitUntil: 'commit' });
+  await visible(page);
+  const { word, dots } = await page.evaluate(() => {
+    const range = document.createRange();
+    range.selectNodeContents(document.querySelector('#loader .loader-label')!.firstChild!);
+    const w = range.getBoundingClientRect();
+    const yellow = [...document.querySelectorAll('#loader .f-proc rect[height="5"][width="5"]')].map((r) => r.getBoundingClientRect());
+    return { word: (w.left + w.right) / 2, dots: (yellow[0].left + yellow[yellow.length - 1].right) / 2 };
+  });
+  expect(Math.abs(word - dots)).toBeLessThanOrEqual(1);
+});

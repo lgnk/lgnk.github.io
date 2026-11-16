@@ -16,14 +16,14 @@ const posters = Object.fromEntries(
 
 <section id="trabalhos" class="section">
   <div class="wrap">
-    <p class="label" data-reveal><span aria-hidden="true">// </span>trabalhos</p>
-    <h2 class="section-title" data-reveal style="--i: 1">O que a gente já construiu.</h2>
+    <p class="label" data-reveal="type"><span aria-hidden="true">// </span>trabalhos</p>
+    <h2 class="section-title" data-reveal="title" style="--i: 1">O que a gente já construiu.</h2>
     <ol class="cases">
       {
-        cases.map((c) => (
+        cases.map((c, i) => (
           <li>
             <article class="case" data-case={c.slug}>
-              <div class="case-media" data-reveal>
+              <div class="case-media" data-reveal={i % 2 ? 'right' : 'left'}>
                 {c.media.type === 'video' && (
                   <video
                     class="case-video"
@@ -50,7 +50,7 @@ const posters = Object.fromEntries(
                   </div>
                 )}
               </div>
-              <div class="case-text" data-reveal style="--i: 1">
+              <div class="case-text" data-reveal={i % 2 ? 'left' : 'right'} style="--i: 1">
                 <h3>{c.name}</h3>
                 <p class="case-kind">{c.kind}</p>
                 <dl class="case-story">
@@ -83,7 +83,7 @@ const posters = Object.fromEntries(
         ))
       }
     </ol>
-    <div class="work-cta" data-reveal>
+    <div class="work-cta" data-reveal="up">
       <p>Quer algo assim pra sua empresa?</p>
       <a class="btn btn--primary" href="#orcamento">Pedir orçamento →</a>
     </div>

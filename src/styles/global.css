@@ -33,6 +33,7 @@
   --dur-press: 70ms;
   --dur-enter: 420ms;
   --dur-exit: 220ms;
+  --dur-leave: 380ms;
   --maxw: 1240px;
 }
 
@@ -156,30 +157,63 @@ mark { background: var(--yellow); color: var(--ink); padding: 0 0.1em; }
 .num { color: var(--purple-ink); font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /*
-  Itens das seções: sobem e aparecem quando chegam na tela, sobem e somem quando saem pelo alto.
-  Tudo ligado à rolagem, sem JavaScript. --i atrasa os vizinhos de um grupo (sobem de mais longe).
-  Sem suporte do navegador ou com movimento reduzido, ficam parados e visíveis.
+  Entradas e saídas das seções. scripts/reveal.ts marca cada [data-reveal] com data-reveal-state:
+  "in" (chegou na faixa do meio da tela), "above" (saiu pelo alto) ou nada/"below" (ainda não chegou).
+  O valor de data-reveal diz de onde o item parte; --i atrasa os vizinhos de um grupo.
+  É tudo transição, então dá para interromper e voltar. Sem .reveal-on (sem script, sem
+  IntersectionObserver ou com movimento reduzido) nada se esconde.
 */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    /* Propriedades separadas de propósito: no atalho "animation", o minificador embute a linha do tempo, e o Chrome recusa. */
-    [data-reveal] {
-      animation-name: reveal-in, reveal-out;
-      animation-timing-function: linear;
-      animation-fill-mode: both, forwards;
-      animation-timeline: view(), view();
-      /* Entra nos primeiros 240 px de rolagem; só some depois que 40% já saiu pelo alto (texto comprido segue legível). */
-      animation-range: entry 0% entry 240px, exit 40% exit 100%;
-    }
-  }
+@property --blinds { syntax: '<percentage>'; inherits: true; initial-value: 100%; }
+
+main > section, .site-footer { overflow-x: clip; }
+
+.reveal-on [data-reveal] {
+  transition-property: opacity, translate, scale, clip-path, box-shadow, --blinds;
+  transition-duration: 720ms;
+  transition-timing-function: var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 120ms);
 }
-@keyframes reveal-in {
-  from { opacity: 0; translate: 0 calc(28px + var(--i, 0) * 16px); }
-  to { opacity: 1; translate: 0 0; }
+.reveal-on [data-reveal]:not([data-reveal-state="in"]) { opacity: 0; }
+
+/* Pontos de partida, um por tipo de entrada. */
+.reveal-on [data-reveal="up"]:not([data-reveal-state="in"], [data-reveal-state="above"]) { translate: 0 56px; }
+.reveal-on [data-reveal="left"]:not([data-reveal-state="in"], [data-reveal-state="above"]) { translate: -80px 0; }
+.reveal-on [data-reveal="right"]:not([data-reveal-state="in"], [data-reveal-state="above"]) { translate: 80px 0; }
+.reveal-on [data-reveal="zoom"]:not([data-reveal-state="in"], [data-reveal-state="above"]) { scale: 0.9; }
+/* Cartão de fliperama: sai da página e a sombra dura cresce, como o botão soltando. */
+.reveal-on [data-reveal="pop"]:not([data-reveal-state="in"], [data-reveal-state="above"]) {
+  translate: 0 36px; scale: 0.9; box-shadow: 0 0 0 var(--ink);
 }
-@keyframes reveal-out {
-  from { opacity: 1; translate: 0 0; }
-  to { opacity: 0; translate: 0 -24px; }
+/*
+  Recortes de partida sempre deixam 1% do item dentro: o Chrome usa o clip-path do próprio item para
+  decidir se ele está na tela, e um recorte vazio faria o item nunca entrar.
+*/
+/* Título sobe de dentro de uma fenda (o recorte fica, o texto sobe). */
+.reveal-on [data-reveal="title"] { clip-path: inset(-25% -10% -25% -10%); }
+.reveal-on [data-reveal="title"]:not([data-reveal-state="in"], [data-reveal-state="above"]) {
+  opacity: 1; clip-path: inset(99% -10% -25% -10%); translate: 0 0.55em;
+}
+/* Rótulo "// ..." é digitado, um bloco de cada vez (aparece na hora e o recorte anda em degraus). */
+.reveal-on [data-reveal="type"] {
+  clip-path: inset(-25% -10% -25% -10%);
+  transition-duration: 640ms;
+  transition-timing-function: step-start, var(--ease-out), var(--ease-out), steps(14, end), var(--ease-out), var(--ease-out);
+}
+.reveal-on [data-reveal="type"]:not([data-reveal-state="in"], [data-reveal-state="above"]) {
+  clip-path: inset(-25% 99% -25% -10%);
+}
+/* Foto entra em persianas pixeladas, como a tela de carregamento: a moldura já está lá. */
+.reveal-on [data-reveal="blinds"] { transition-timing-function: steps(6, end); transition-duration: 600ms; }
+.reveal-on [data-reveal="blinds"] img {
+  -webkit-mask: linear-gradient(#000 var(--blinds), transparent var(--blinds)) 0 0 / 100% 12.5%;
+  mask: linear-gradient(#000 var(--blinds), transparent var(--blinds)) 0 0 / 100% 12.5%;
+}
+.reveal-on [data-reveal="blinds"]:not([data-reveal-state="in"], [data-reveal-state="above"]) { opacity: 1; --blinds: 0%; }
+
+/* Saindo pelo alto: sobe e some, rápido e sem esperar os vizinhos. */
+.reveal-on [data-reveal][data-reveal-state="above"] {
+  opacity: 0; translate: 0 -40px;
+  transition-duration: var(--dur-leave); transition-timing-function: var(--ease-in); transition-delay: 0s;
 }
 
 [hidden] { display: none !important; }

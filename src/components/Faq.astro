@@ -24,11 +24,11 @@ const faqs: { icon: FaqIcon; q: string; a: string }[] = [
 
 <section id="perguntas" class="section">
   <div class="wrap">
-    <h2 class="label" data-reveal><span aria-hidden="true">// </span>perguntas frequentes</h2>
+    <h2 class="label" data-reveal="type"><span aria-hidden="true">// </span>perguntas frequentes</h2>
     <dl class="faq">
       {
         faqs.map((f, i) => (
-          <div class="item" data-reveal style={`--i: ${i % 2}`}>
+          <div class="item" data-reveal="up" style={`--i: ${i % 2}`}>
             <dt>
               <Fragment set:html={pixelIconSvg(f.icon, 'faq-icon')} />
               <span>{f.q}</span>

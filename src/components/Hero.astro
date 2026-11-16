@@ -6,17 +6,17 @@ import WhatsAppLink from './WhatsAppLink.astro';
 <section id="topo" class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <h1 class="hero-title">Menos fila, menos planilha, <span class="nowrap">mais <mark>venda</mark>.</span></h1>
-      <p class="hero-sub">
+      <h1 class="hero-title" data-reveal="title">Menos fila, menos planilha, <span class="nowrap">mais <mark>venda</mark>.</span></h1>
+      <p class="hero-sub" data-reveal="up" style="--i: 1">
         A gente cria o sistema, o app ou o site que tira a sua empresa do papel e do WhatsApp bagunçado. Você fala direto
         com quem constrói.
       </p>
-      <div class="hero-actions">
+      <div class="hero-actions" data-reveal="up" style="--i: 2">
         <WhatsAppLink variant="primary" label="Conversar no WhatsApp →" cta="topo" />
         <a class="hero-more" href="#orcamento">Montar meu orçamento ↓</a>
       </div>
     </div>
-    <div class="hero-stage" id="heroStage">
+    <div class="hero-stage" id="heroStage" data-reveal="fade" style="--i: 1">
       <canvas aria-hidden="true"></canvas>
       <Mascot
         animated

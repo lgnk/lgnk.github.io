@@ -9,19 +9,20 @@ const photo = Object.values(photos)[0]?.default;
   <div class="wrap about">
     {
       photo ? (
-        <Image
-          src={photo}
-          widths={[240, 360, 480, 560]}
-          sizes="(min-width: 768px) 280px, 240px"
-          alt="Ian Langkammer, fundador da LGNK, programando no notebook"
-          class="photo"
-          data-reveal
-        />
+        <div class="photo-frame" data-reveal="blinds">
+          <Image
+            src={photo}
+            widths={[240, 360, 480, 560]}
+            sizes="(min-width: 768px) 280px, 240px"
+            alt="Ian Langkammer, fundador da LGNK, programando no notebook"
+            class="photo"
+          />
+        </div>
       ) : (
-        <div class="monogram" aria-hidden="true" data-reveal>IL</div>
+        <div class="monogram" aria-hidden="true" data-reveal="zoom">IL</div>
       )
     }
-    <div data-reveal style="--i: 1">
+    <div data-reveal="right" style="--i: 1">
       <p class="label"><span aria-hidden="true">// </span>quem está por trás</p>
       <h2 class="name">Ian Langkammer</h2>
       <p class="role">Fundador</p>
@@ -36,9 +37,11 @@ const photo = Object.values(photos)[0]?.default;
 
 <style>
   .about { display: grid; gap: 24px; align-items: start; }
-  .monogram, .photo { width: min(100%, 240px); height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  /* A moldura leva borda, sombra e fundo escuro; a foto preenche por dentro (e entra em persianas). */
+  .photo-frame, .monogram { width: min(100%, 240px); aspect-ratio: 4 / 5; }
+  .photo-frame { border: var(--line); box-shadow: var(--shadow); background: var(--ink); }
   /* Recorte 4:5 que mantém o rosto: a foto é 2:3, então corta pouco de cima (o cabelo respira) e mais de baixo. */
-  .photo { object-position: 50% 15%; border: var(--line); box-shadow: var(--shadow); background: var(--ink); }
+  .photo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; }
   .monogram {
     background: var(--yellow); border: var(--line); box-shadow: var(--shadow); display: grid; place-items: center;
     font-size: 2.5rem; font-weight: 800; letter-spacing: 0.06em;
@@ -49,6 +52,6 @@ const photo = Object.values(photos)[0]?.default;
   .direct { margin-top: 16px; font-size: var(--text-lead); font-weight: 700; }
   @media (min-width: 768px) {
     .about { grid-template-columns: 280px 1fr; gap: 48px; align-items: center; }
-    .monogram, .photo { width: 280px; }
+    .photo-frame, .monogram { width: 280px; }
   }
 </style>
