@@ -3,7 +3,7 @@ import { cases } from '../../src/data/cases';
 
 describe('cases', () => {
   it('estão na ordem aprovada', () => {
-    expect(cases.map((c) => c.slug)).toEqual(['beerpass', 'avance', 'inkaboxe', 'pedro-porto', 'silver-schuffner']);
+    expect(cases.map((c) => c.slug)).toEqual(['beerpass', 'avance', 'inkaboxe', 'jm-atacado', 'pedro-porto', 'silver-schuffner']);
   });
 
   it('InkaBoxe e Silver Schuffner não têm link', () => {
@@ -11,17 +11,24 @@ describe('cases', () => {
     expect(cases.find((c) => c.slug === 'silver-schuffner')?.href).toBeNull();
   });
 
-  it('Pedro Porto aponta para o portfólio que aparece na imagem', () => {
-    const c = cases.find((x) => x.slug === 'pedro-porto')!;
-    expect(c.href).toBe('https://pedroportodesign.online');
-    expect(c.summary).toBe('Portfólio do designer refeito em código e loja de roupas sob demanda com Pix, cartão e frete');
-  });
-
   it('nenhum link aponta para a conta pessoal', () => {
     for (const c of cases) expect(c.href ?? '').not.toContain('ianlgnk');
   });
 
-  it('toda imagem tem texto alternativo', () => {
-    for (const c of cases) expect(c.imageAlt.trim()).not.toBe('');
+  it('fatos confirmados pelo Ian', () => {
+    const by = (slug: string) => cases.find((c) => c.slug === slug)!;
+    expect(by('avance').result).toContain('Mais de 6 treinadores e 80 alunos');
+    expect(by('beerpass').built).toContain('Stone e PagBank');
+    expect(by('inkaboxe').result).toBe('Reconhece o aluno pelo rosto mesmo sem internet.');
+    expect(by('pedro-porto').result).toContain('Mercado Pago e Melhor Envio');
+    expect(by('silver-schuffner').result).toBe('Em desenvolvimento.');
+  });
+
+  it('nenhum case fala em preço', () => {
+    for (const c of cases) expect(JSON.stringify(c)).not.toMatch(/R\$/);
+  });
+
+  it('toda foto tem texto alternativo', () => {
+    for (const c of cases) if (c.media.type === 'image') expect(c.media.alt.trim()).not.toBe('');
   });
 });
