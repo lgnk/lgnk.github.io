@@ -25,7 +25,7 @@ export const site: SiteConfig = {
   email: { address: 'contato@lgnk.com.br', ready: true },
   instagram: null,
   // Só dígitos: 55 + DDD + número. O build de produção recusa o número fictício.
-  whatsapp: { number: '5533988429751', message: 'Olá! Vim pelo site da LGNK.' },
+  whatsapp: { number: '5531982561619', message: 'Olá! Vim pelo site da LGNK.' },
   // ID do projeto no Microsoft Clarity. Vazio = analytics desligado.
   clarityId: 'ze9fnfo6pb',
   sitePriceFrom: 'R$ 2.000',
