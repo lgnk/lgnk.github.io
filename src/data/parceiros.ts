@@ -43,7 +43,7 @@ export const integrations: IntegrationGroup[] = [
     icon: 'maquininha',
     items: [
       symbol('Stone', 'stone'),
-      wordmark('PagBank', 'pagbank', 22),
+      wordmark('PagBank', 'pagbank', 25),
       symbol('Mercado Pago', 'mercado-pago'),
       symbol('Stripe', 'stripe'),
       wordmark('Pagar.me', 'pagar-me', 30),

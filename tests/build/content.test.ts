@@ -111,6 +111,12 @@ describe('conteúdo da home', () => {
     }
   });
 
+  it('logo do PagBank em tom único: só o contorno do símbolo e o nome, sem as áreas coloridas que viravam mancha preta', () => {
+    const svg = readFileSync(join(DIST, 'logos', 'pagbank.svg'), 'utf8');
+    expect(svg).not.toMatch(/#(ffe72d|dde05b|9ed5d6)/i);
+    expect((svg.match(/<path\b/g) ?? []).length).toBe(2);
+  });
+
   it('quanto custa: proposta por escrito depois de uma conversa, sem número', () => {
     expect(body).toContain('Depende do que você precisa.');
   });
