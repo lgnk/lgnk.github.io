@@ -5,7 +5,8 @@ import WhatsAppLink from './WhatsAppLink.astro';
 
 <footer id="contato" class="site-footer">
   <div class="wrap">
-    <h2 class="cta">Vamos conversar sobre o <mark>seu</mark> sistema?</h2>
+    <h2 class="cta">Conta o que está <mark>travando</mark>.</h2>
+    <p class="cta-sub">A gente responde em até 1 dia útil.</p>
     <div class="contact">
       <WhatsAppLink variant="footer" label="Conversar no WhatsApp →" cta="rodape" />
       <a class="contact-link" href={`mailto:${site.email.address}`}>{site.email.address}</a>
@@ -30,6 +31,7 @@ import WhatsAppLink from './WhatsAppLink.astro';
 <style>
   .site-footer { background: var(--ink); color: var(--cream); padding-block: clamp(56px, 8vw, 96px) 32px; }
   .cta { font-size: clamp(2rem, 0.6rem + 4.2vw, 3.5rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; max-width: 18ch; }
+  .cta-sub { margin-top: 14px; font-size: var(--text-lead); color: var(--footer-small); }
   .contact { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; margin-top: 32px; font-size: var(--text-lead); }
   .contact-link { text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
   .legal { margin-top: 56px; padding-top: 20px; border-top: 2px solid var(--ink-line); font-size: var(--text-sm); color: var(--footer-small); display: grid; gap: 10px; }

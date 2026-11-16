@@ -11,7 +11,7 @@ describe('layout da home', () => {
   it('tem título e descrição', () => {
     expect(text(doc.querySelector('title'))).toBe('LGNK Sistemas · Software sob medida para pequenas e médias empresas');
     expect(doc.querySelector('meta[name="description"]')?.getAttribute('content')).toBe(
-      'Arquitetamos, construímos e mantemos sistemas para pequenas e médias empresas: sistemas sob medida, apps, integrações com maquininha e Pix, sites e manutenção. Belo Horizonte, MG.',
+      'Sistemas, apps e sites sob medida para pequenas e médias empresas pararem de perder venda: pedidos, estoque, maquininha e Pix num lugar só. Belo Horizonte, MG.',
     );
   });
 
@@ -19,7 +19,7 @@ describe('layout da home', () => {
     expect(doc.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://lgnk.com.br/');
     expect(doc.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe('https://lgnk.com.br/og.png');
     expect(doc.querySelector('meta[property="og:image:alt"]')?.getAttribute('content')).toBe(
-      'LGNK Sistemas — Sistemas que aguentam o dia a dia.',
+      'LGNK Sistemas — Menos fila, menos planilha, mais venda.',
     );
   });
 

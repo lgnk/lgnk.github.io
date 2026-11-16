@@ -57,7 +57,7 @@ const jsonLd = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="LGNK Sistemas — Sistemas que aguentam o dia a dia." />
+    <meta property="og:image:alt" content="LGNK Sistemas — Menos fila, menos planilha, mais venda." />
     <meta name="twitter:card" content="summary_large_image" />
 
     <Font cssVariable="--font-sans" preload={[{ weight: 400 }, { weight: 700 }]} />
@@ -83,8 +83,11 @@ const jsonLd = {
         var behind = Array.prototype.filter.call(document.body.children, function (el) {
           return el !== loader && el.tagName !== 'SCRIPT' && el.tagName !== 'NOSCRIPT';
         });
-        behind.forEach(function (el) { el.inert = true; });
         var gone = false;
+        // Só fica inerte quando a nuvem aparece de verdade (depois de 0,4 s). Com internet boa, nada muda.
+        function block() { if (!gone) behind.forEach(function (el) { el.inert = true; }); }
+        if (getComputedStyle(loader).opacity !== '0') block();
+        else loader.addEventListener('animationstart', block);
         function hide() {
           if (gone) return;
           gone = true;

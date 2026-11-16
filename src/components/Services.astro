@@ -1,16 +1,22 @@
 ---
 const services = [
-  { title: 'Sistemas sob medida', text: 'Pedidos, estoque, agenda, financeiro, painéis. Do jeito que a sua empresa trabalha.' },
-  { title: 'Apps e integrações', text: 'iPhone, Android e maquininha. Pix, Mercado Pago, Asaas, Stone, PagBank e frete.' },
-  { title: 'Sites e lojas virtuais', text: 'Vitrine, catálogo ou loja. O jeito mais rápido de começar com a gente.' },
-  { title: 'Manutenção e evolução', text: 'Plano de manutenção mensal: correções, melhorias, servidor e backup, com resposta em até 1 dia útil.' },
+  {
+    title: 'Sistema sob medida',
+    text: 'Pedidos, estoque, agenda e financeiro num lugar só, do jeito que a sua empresa já trabalha. Chega de planilha.',
+  },
+  {
+    title: 'App e maquininha',
+    text: 'Seu cliente compra pelo celular e paga na maquininha ou no Pix. A gente integra com Stone, PagBank e Mercado Pago.',
+  },
+  { title: 'Site e loja virtual', text: 'Vitrine, catálogo ou loja com pedido direto no WhatsApp. O jeito mais rápido de começar com a gente.' },
+  { title: 'Manutenção', text: 'Correções, melhorias, servidor e backup todo mês. Deu problema, a gente responde em até 1 dia útil.' },
 ];
 ---
 
 <section id="servicos" class="section">
   <div class="wrap">
     <p class="label"><span aria-hidden="true">// </span>o que fazemos</p>
-    <h2 class="section-title">Do papel ao sistema rodando — e depois.</h2>
+    <h2 class="section-title">O que a gente resolve.</h2>
     <ul class="grid4">
       {
         services.map((s) => (
@@ -21,6 +27,15 @@ const services = [
         ))
       }
     </ul>
+    <div class="unsure">
+      <p>Não sabe se precisa de site, app ou sistema? Conta o problema que a gente diz o que resolve.</p>
+      <a class="btn btn--alt" href="#orcamento">Montar meu orçamento →</a>
+    </div>
   </div>
 </section>
+
+<style>
+  .unsure { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 32px; }
+  .unsure p { font-size: var(--text-lead); font-weight: 700; max-width: 46ch; }
+</style>
 

@@ -18,12 +18,12 @@ describe('conteúdo da home', () => {
   it('tem um único h1 com a frase do topo', () => {
     const h1s = doc.querySelectorAll('h1');
     expect(h1s.length).toBe(1);
-    expect(text(h1s[0])).toBe('Sistemas que aguentam o dia a dia.');
+    expect(text(h1s[0])).toBe('Menos fila, menos planilha, mais venda.');
   });
 
   it('tem as seções na ordem aprovada', () => {
     const ids = [...doc.querySelectorAll('section[id], footer[id]')].map((el) => el.id);
-    expect(ids).toEqual(['topo', 'provas', 'servicos', 'trabalhos', 'como-trabalhamos', 'orcamento', 'quem-esta-por-tras', 'perguntas', 'contato']);
+    expect(ids).toEqual(['topo', 'servicos', 'trabalhos', 'como-trabalhamos', 'orcamento', 'quem-esta-por-tras', 'perguntas', 'contato']);
   });
 
   it('nenhum preço no site (decisão do Ian)', () => {
@@ -50,5 +50,27 @@ describe('conteúdo da home', () => {
 
   it('apresenta quem está por trás', () => {
     expect(text(doc.querySelector('#quem-esta-por-tras'))).toContain('Ian Langkammer');
+  });
+
+  it('serviços falam do problema resolvido, com saída para quem não sabe o que precisa', () => {
+    const servicos = doc.querySelector('#servicos')!;
+    expect(text(servicos.querySelector('h2'))).toBe('O que a gente resolve.');
+    expect([...servicos.querySelectorAll('li h3')].map(text)).toEqual(['Sistema sob medida', 'App e maquininha', 'Site e loja virtual', 'Manutenção']);
+    expect(text(servicos)).toContain('Não sabe se precisa de site, app ou sistema?');
+    expect(text(servicos.querySelector('a[href="#orcamento"]'))).toBe('Montar meu orçamento →');
+  });
+
+  it('FAQ acolhe quem não sabe o que precisa', () => {
+    expect(body).toContain('Não sei se preciso de site, app ou sistema.');
+  });
+
+  it('rodapé chama para contar o problema, sem supor que a pessoa precisa de um sistema', () => {
+    const footer = doc.querySelector('footer#contato')!;
+    expect(text(footer.querySelector('h2'))).toBe('Conta o que está travando.');
+    expect(text(footer)).toContain('A gente responde em até 1 dia útil.');
+  });
+
+  it('sem a faixa de números', () => {
+    expect(doc.querySelector('#provas')).toBeNull();
   });
 });

@@ -29,12 +29,12 @@ describe('marca nova no site', () => {
   });
 
   it('destaque do título é marca-texto', () => {
-    expect(text(home.querySelector('h1 mark'))).toBe('aguentam');
+    expect(text(home.querySelector('h1 mark'))).toBe('venda');
   });
 
   it('topo tem subtítulo novo, os dois botões e o mascote', () => {
     const topo = home.querySelector('#topo')!;
-    expect(text(topo)).toContain('a gente automatiza a operação para você parar de perder venda.');
+    expect(text(topo)).toContain('Você fala direto com quem constrói.');
     expect(topo.querySelector('a[data-whatsapp]')).not.toBeNull();
     expect(topo.querySelector('svg[role="img"]')).not.toBeNull();
   });
