@@ -29,6 +29,8 @@ test('funciona sem JavaScript', async ({ browser }) => {
 
 test('foco visível', async ({ page }) => {
   await page.goto('/');
+  // Enquanto a nuvem de carregamento está na frente, nada recebe foco (às vezes ela sai um instante depois do load).
+  await expect(page.locator('#loader')).toHaveCount(0);
   let reachedHeroWhatsApp = false;
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('Tab');

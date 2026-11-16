@@ -1,27 +1,72 @@
 import { test, expect } from './fixtures';
 
-test('internet boa: a nuvem de carregamento nem aparece', async ({ page }) => {
+const slowFonts = (page: import('@playwright/test').Page, ms = 1800) =>
+  page.route('**/_astro/fonts/*.woff2', async (route) => {
+    await new Promise((r) => setTimeout(r, ms));
+    await route.continue();
+  });
+
+const visible = (page: import('@playwright/test').Page) =>
+  expect
+    .poll(() => page.locator('#loader').evaluate((el) => getComputedStyle(el).opacity).catch(() => 'sumiu'), { timeout: 1500 })
+    .toBe('1');
+
+test('internet boa: a nuvem sai assim que o site fica pronto', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#loader')).toHaveCount(0);
 });
 
-test('internet lenta: a nuvem aparece e some quando o site fica pronto', async ({ page }) => {
-  await page.route('**/_astro/fonts/*.woff2', async (route) => {
-    await new Promise((r) => setTimeout(r, 1800));
-    await route.continue();
+test('a nuvem já abre na frente: nenhum quadro mostra o site antes dela', async ({ page }) => {
+  // A cada quadro, anota se o site já estava na página com a nuvem ainda transparente (antes de ela começar a sair).
+  await page.addInitScript(() => {
+    const vazou: string[] = [];
+    (window as any).__vazou = vazou;
+    (function tick() {
+      const loader = document.getElementById('loader');
+      if (loader && loader.classList.contains('loader--out')) return;
+      if (document.querySelector('header, main') && (!loader || getComputedStyle(loader).opacity !== '1'))
+        vazou.push(loader ? getComputedStyle(loader).opacity : 'sem nuvem');
+      if (!loader && document.querySelector('main')) return;
+      requestAnimationFrame(tick);
+    })();
   });
+  await slowFonts(page);
   await page.goto('/', { waitUntil: 'commit' });
-  const loader = page.locator('#loader');
-  await expect
-    .poll(() => loader.evaluate((el) => getComputedStyle(el).opacity).catch(() => 'sumiu'), { timeout: 1500 })
-    .toBe('1');
-  await expect(loader).toHaveCount(0, { timeout: 6000 });
+  await expect(page.locator('#loader')).toHaveCount(0, { timeout: 6000 });
+  expect(await page.evaluate(() => (window as any).__vazou)).toEqual([]);
 });
 
-test('nunca fica presa: some em até 2,5 s mesmo se as fontes não chegarem', async ({ page }) => {
+test('internet lenta: a nuvem só sai depois que as fontes chegam, mesmo passando de 2,5 s', async ({ page }) => {
+  // No instante em que a saída começa, anota se a página já estava lida e se ainda havia fonte carregando.
+  await page.addInitScript(() => {
+    new MutationObserver((records, obs) => {
+      for (const r of records) {
+        const el = r.target as HTMLElement;
+        if (el.id === 'loader' && el.classList.contains('loader--out')) {
+          (window as any).__saida = {
+            pagina: document.readyState,
+            carregando: [...document.fonts].filter((f) => f.status === 'loading').length,
+          };
+          obs.disconnect();
+        }
+      }
+    }).observe(document, { subtree: true, attributes: true, attributeFilter: ['class'] });
+  });
+  await slowFonts(page, 3500);
+  await page.goto('/', { waitUntil: 'commit' });
+  await visible(page);
+  await expect.poll(() => page.evaluate(() => (window as any).__saida ?? null), { timeout: 8000 }).toEqual({
+    pagina: expect.not.stringMatching(/^loading$/),
+    carregando: 0,
+  });
+  await expect(page.locator('#loader')).toHaveCount(0, { timeout: 2000 });
+});
+
+test('nunca fica presa: some em até 8 s mesmo se as fontes não chegarem', async ({ page }) => {
   await page.route('**/_astro/fonts/*.woff2', () => {});
   await page.goto('/', { waitUntil: 'commit' });
-  await expect(page.locator('#loader')).toHaveCount(0, { timeout: 4000 });
+  await visible(page);
+  await expect(page.locator('#loader')).toHaveCount(0, { timeout: 11000 });
 });
 
 test('enquanto a nuvem está na frente, o teclado não foca nada escondido atrás dela', async ({ page }) => {
@@ -39,17 +84,6 @@ test('enquanto a nuvem está na frente, o teclado não foca nada escondido atrá
   await expect(page.locator('#loader')).toHaveCount(0, { timeout: 6000 });
   expect(await page.evaluate(() => document.querySelector('main')!.inert)).toBe(false);
 });
-
-const slowFonts = (page: import('@playwright/test').Page, ms = 1800) =>
-  page.route('**/_astro/fonts/*.woff2', async (route) => {
-    await new Promise((r) => setTimeout(r, ms));
-    await route.continue();
-  });
-
-const visible = (page: import('@playwright/test').Page) =>
-  expect
-    .poll(() => page.locator('#loader').evaluate((el) => getComputedStyle(el).opacity).catch(() => 'sumiu'), { timeout: 1500 })
-    .toBe('1');
 
 test('internet lenta: a nuvem cai, flutua e olha para os lados, sem trocar de rosto', async ({ page }) => {
   await slowFonts(page);
@@ -80,14 +114,6 @@ test('internet lenta: a tela sai fechando em persianas antes de sumir', async ({
   await visible(page);
   await expect.poll(() => page.evaluate(() => (window as any).__saida ?? ''), { timeout: 4000 }).toBe('loader-wipe');
   await expect(page.locator('#loader')).toHaveCount(0, { timeout: 2000 });
-});
-
-test('antes da nuvem aparecer (0,4 s), nada fica inerte', async ({ page }) => {
-  await slowFonts(page);
-  await page.goto('/', { waitUntil: 'commit' });
-  await page.waitForSelector('main', { state: 'attached' });
-  await page.waitForTimeout(150);
-  expect(await page.evaluate(() => document.querySelector('main')!.inert)).toBe(false);
 });
 
 test('com movimento reduzido a nuvem fica parada, olhando para a frente', async ({ page }) => {

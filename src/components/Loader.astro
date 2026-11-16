@@ -3,8 +3,8 @@ import Mascot from './Mascot.astro';
 ---
 
 <!--
-  Tela de carregamento: só aparece se o site demorar mais de 0,4 s (internet ruim).
-  Some quando o HTML e as fontes estão prontos, no máximo 2,5 s depois (script no fim do <body> em Base.astro).
+  Tela de carregamento: já nasce na frente, opaca, para nada do site aparecer antes dela (no 3G o HTML chega aos pedaços).
+  Some quando o HTML foi lido, os scripts rodaram e as fontes chegaram; no máximo 8 s depois do HTML (script no fim do <body> em Base.astro).
 -->
 <div id="loader" class="loader" aria-hidden="true">
   <div class="loader-box">
@@ -19,7 +19,7 @@ import Mascot from './Mascot.astro';
 <style>
   .loader {
     position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
-    background: var(--cream); animation: loader-in 0.2s ease-out 0.4s both;
+    background: var(--cream);
   }
   .loader-box { display: grid; justify-items: center; gap: 4px; }
   /* Igual à etiqueta do topo ("processando…"): as reticências são parte do texto. */
@@ -31,7 +31,6 @@ import Mascot from './Mascot.astro';
   .loader { --cloud: 132px; }
   .loader-face { width: var(--cloud); height: var(--cloud); }
   .loader :global(.loader-cloud) { display: block; width: 100%; height: 100%; }
-  @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
   @keyframes loader-out { to { opacity: 0; } }
 
   /*
@@ -39,8 +38,8 @@ import Mascot from './Mascot.astro';
     O rosto é sempre o mesmo; só os olhos (os dois primeiros quadrados do rosto) andam 1 pixel da nuvem.
   */
   @media (prefers-reduced-motion: no-preference) {
-    .loader-face { animation: loader-drop 0.32s steps(4, end) 0.4s both, loader-bob 1s steps(1, end) 0.72s infinite; }
-    .loader-face :global(.f-idle rect:nth-of-type(-n + 2)) { animation: loader-look 2.4s steps(1, end) 0.72s infinite; }
+    .loader-face { animation: loader-drop 0.32s steps(4, end) both, loader-bob 1s steps(1, end) 0.32s infinite; }
+    .loader-face :global(.f-idle rect:nth-of-type(-n + 2)) { animation: loader-look 2.4s steps(1, end) 0.32s infinite; }
   }
   @keyframes loader-drop { from { translate: 0 -36px; } to { translate: 0 0; } }
   @keyframes loader-bob { 50% { translate: 0 -4px; } }
@@ -61,7 +60,6 @@ import Mascot from './Mascot.astro';
   }
   @keyframes loader-wipe { from { --wipe: 100%; } to { --wipe: 0%; } }
   @media (prefers-reduced-motion: reduce) {
-    .loader { animation-duration: 0s; }
     .loader.loader--out { -webkit-mask: none; mask: none; animation: loader-out 0.2s ease-out both; }
   }
 </style>

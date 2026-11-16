@@ -84,7 +84,9 @@ const jsonLd = {
     <Footer />
     <ConsentBanner />
     <script is:inline>
-      // O HTML chegou inteiro: some com a nuvem de carregamento assim que as fontes estiverem prontas (no máximo 2,5 s).
+      // O HTML chegou inteiro. A nuvem de carregamento sai quando a página está pronta para ser vista:
+      // scripts da página rodados (DOMContentLoaded) e fontes carregadas. Nunca fica presa: no máximo 8 s depois daqui.
+      // Não espera o `load`: ele inclui as fotos dos cases, lá embaixo, que não fazem falta na primeira tela.
       (function () {
         var loader = document.getElementById('loader');
         if (!loader) return;
@@ -92,24 +94,29 @@ const jsonLd = {
         var behind = Array.prototype.filter.call(document.body.children, function (el) {
           return el !== loader && el.tagName !== 'SCRIPT' && el.tagName !== 'NOSCRIPT';
         });
+        behind.forEach(function (el) { el.inert = true; });
         var gone = false;
-        // Só fica inerte quando a nuvem aparece de verdade (depois de 0,4 s). Com internet boa, nada muda.
-        function block() { if (!gone) behind.forEach(function (el) { el.inert = true; }); }
-        if (getComputedStyle(loader).opacity !== '0') block();
-        // Só a animação da própria tela conta: as da nuvem e do cursor (filhos) também disparam este evento.
-        else loader.addEventListener('animationstart', function (e) { if (e.target === loader) block(); });
         function hide() {
           if (gone) return;
           gone = true;
           behind.forEach(function (el) { el.inert = false; });
-          // Se a nuvem nem chegou a aparecer, sai na hora; se apareceu, fecha as persianas antes de sair.
-          if (getComputedStyle(loader).opacity === '0') return loader.remove();
+          // Se nada foi pintado ainda (internet boa), a nuvem nem chegou a ser vista: sai na hora.
+          // Se apareceu, fecha as persianas antes de sair.
+          var painted = performance.getEntriesByName && performance.getEntriesByName('first-contentful-paint').length;
+          if (!painted) return loader.remove();
           loader.classList.add('loader--out');
           setTimeout(function () { loader.remove(); }, 400);
         }
-        var cap = setTimeout(hide, 2500);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { clearTimeout(cap); hide(); });
-        else hide();
+        var cap = setTimeout(hide, 8000);
+        function whenFontsReady() {
+          // Mede a página agora: as fontes que ela usa entram na fila antes de perguntar se ainda falta alguma.
+          void document.body.offsetHeight;
+          var fonts = document.fonts && document.fonts.ready;
+          if (!fonts) return hide();
+          fonts.then(function () { clearTimeout(cap); hide(); });
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', whenFontsReady);
+        else whenFontsReady();
       })();
     </script>
     <script>

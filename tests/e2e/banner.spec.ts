@@ -26,6 +26,8 @@ test('banner não esconde o elemento focado em tela pequena', async ({ page }) =
   await page.setViewportSize({ width: 320, height: 568 });
   await page.goto('/');
   await expect(page.locator('#consent')).toBeVisible();
+  // Enquanto a nuvem de carregamento está na frente, nada recebe foco (às vezes ela sai um instante depois do load).
+  await expect(page.locator('#loader')).toHaveCount(0);
   const covered: string[] = [];
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('Tab');
