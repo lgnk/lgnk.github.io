@@ -26,20 +26,22 @@ describe('conteúdo da home', () => {
     expect(ids).toEqual(['topo', 'provas', 'servicos', 'trabalhos', 'como-trabalhamos', 'orcamento', 'quem-esta-por-tras', 'perguntas', 'contato']);
   });
 
-  it('o único valor em reais é o do site vitrine', () => {
-    const prices = body.match(/R\$\s?\d{1,3}(?:\.\d{3})*(?:,\d{2})?/g) ?? [];
-    expect(prices.length).toBeGreaterThanOrEqual(2);
-    for (const p of prices) expect(p).toBe('R$ 2.000');
+  it('nenhum preço no site (decisão do Ian)', () => {
+    for (const path of ['/', '/privacidade/']) {
+      const t = text(page(path).body);
+      expect(t, path).not.toMatch(/R\$/);
+      expect(t, path).not.toMatch(/a partir de/i);
+    }
   });
 
-  it('só o card de sites mostra preço', () => {
+  it('os quatro serviços continuam, sem preço', () => {
     const cards = [...doc.querySelectorAll('#servicos li')];
     expect(cards.length).toBe(4);
-    for (const card of cards) {
-      const title = text(card.querySelector('h3'));
-      if (title === 'Sites e lojas virtuais') expect(text(card)).toContain('A partir de R$ 2.000');
-      else expect(text(card)).not.toContain('R$');
-    }
+    expect(doc.querySelector('#servicos .price')).toBeNull();
+  });
+
+  it('quanto custa: proposta por escrito depois de uma conversa, sem número', () => {
+    expect(body).toContain('Depende do que você precisa.');
   });
 
   it.each(PROMISES)('traz o compromisso: %s', (promise) => {

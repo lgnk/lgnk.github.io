@@ -1,10 +1,8 @@
 ---
-import { site } from '../config';
-
 const services = [
   { title: 'Sistemas sob medida', text: 'Pedidos, estoque, agenda, financeiro, painéis. Do jeito que a sua empresa trabalha.' },
   { title: 'Apps e integrações', text: 'iPhone, Android e maquininha. Pix, Mercado Pago, Asaas, Stone, PagBank e frete.' },
-  { title: 'Sites e lojas virtuais', text: 'Vitrine, catálogo ou loja. O jeito mais rápido de começar com a gente.', price: true },
+  { title: 'Sites e lojas virtuais', text: 'Vitrine, catálogo ou loja. O jeito mais rápido de começar com a gente.' },
   { title: 'Manutenção e evolução', text: 'Plano de manutenção mensal: correções, melhorias, servidor e backup, com resposta em até 1 dia útil.' },
 ];
 ---
@@ -19,7 +17,6 @@ const services = [
           <li>
             <h3>{s.title}</h3>
             <p>{s.text}</p>
-            {s.price && <p class="price">A partir de <strong>{site.sitePriceFrom}</strong></p>}
           </li>
         ))
       }
@@ -27,7 +24,3 @@ const services = [
   </div>
 </section>
 
-<style>
-  .price { display: inline-block; margin-top: 16px !important; color: var(--ink) !important; background: var(--yellow); border: var(--line); box-shadow: var(--shadow-sm); padding: 5px 10px; font-size: var(--text-ui); }
-  .price strong { font-weight: 700; }
-</style>

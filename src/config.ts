@@ -12,7 +12,6 @@ export interface SiteConfig {
   instagram: string | null;
   whatsapp: { number: string; message: string };
   clarityId: string;
-  sitePriceFrom: string;
 }
 
 export const site: SiteConfig = {
@@ -28,5 +27,4 @@ export const site: SiteConfig = {
   whatsapp: { number: '5531982561619', message: 'Olá! Vim pelo site da LGNK.' },
   // ID do projeto no Microsoft Clarity. Vazio = analytics desligado.
   clarityId: 'ze9fnfo6pb',
-  sitePriceFrom: 'R$ 2.000',
 };

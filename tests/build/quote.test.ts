@@ -37,9 +37,9 @@ describe('seção de orçamento', () => {
     expect(builder.querySelector(`label[for="${business.id}"]`)).not.toBeNull();
   });
 
-  it('traz as garantias e os preços num lugar só', () => {
+  it('traz as garantias num lugar só', () => {
     const body = text(section);
-    for (const s of ['Resposta em até 1 dia útil', 'Sem compromisso', 'a partir de R$ 2.000', 'por escrito', 'Você fala direto com quem constrói']) {
+    for (const s of ['Resposta em até 1 dia útil', 'Sem compromisso', 'por escrito', 'Você fala direto com quem constrói']) {
       expect(body).toContain(s);
     }
   });
