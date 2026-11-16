@@ -198,6 +198,9 @@ export function startHero(stage: HTMLElement): () => void {
     const run = !reduce && onScreen && pageVisible;
     if (run && !raf) raf = requestAnimationFrame(frame);
     if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+    // As animações SMIL do mascote também param fora da tela (senão o navegador recalcula estilo a cada quadro).
+    if (run) mascot!.unpauseAnimations();
+    else mascot!.pauseAnimations();
     stage.dataset.running = String(run);
   }
 

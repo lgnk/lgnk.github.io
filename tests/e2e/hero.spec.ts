@@ -33,10 +33,14 @@ test('para quando o palco sai da tela', async ({ page }) => {
   const stage = page.locator('#heroStage');
   await stage.scrollIntoViewIfNeeded();
   await expect(stage).toHaveAttribute('data-running', 'true');
+  const paused = () => page.evaluate(() => (document.getElementById('heroMascot') as unknown as SVGSVGElement).animationsPaused());
+  expect(await paused()).toBe(false);
   await page.locator('#perguntas').scrollIntoViewIfNeeded();
   await expect(stage).toHaveAttribute('data-running', 'false');
+  expect(await paused()).toBe(true);
   await stage.scrollIntoViewIfNeeded();
   await expect(stage).toHaveAttribute('data-running', 'true');
+  expect(await paused()).toBe(false);
 });
 
 test('canvas acompanha o tamanho do palco', async ({ page }) => {

@@ -15,6 +15,8 @@ export interface MascotOptions {
   /** Com título, o SVG é uma imagem com nome; sem, é decorativo (aria-hidden). */
   title?: string;
   background?: { color: string; shape: 'square' | 'circle' };
+  /** Recorte do quadro. Para ícones pequenos use '12 15 96 96': cada pixel da nuvem vira 1 px em 16 px. */
+  viewBox?: string;
   id?: string;
   className?: string;
 }
@@ -108,12 +110,12 @@ function done(): string {
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export function mascotSvg(options: MascotOptions = {}): string {
-  const { animated = false, manualStart = false, states = ['idle'], title, background, id, className } = options;
+  const { animated = false, manualStart = false, states = ['idle'], title, background, id, className, viewBox = '0 0 120 120' } = options;
   const faces: Record<MascotState, () => string> = { idle: () => idle(animated), proc: () => proc(animated), done };
 
   const attrs = [
     'xmlns="http://www.w3.org/2000/svg"',
-    'viewBox="0 0 120 120"',
+    `viewBox="${escape(viewBox)}"`,
     'shape-rendering="crispEdges"',
     `class="${['mascot', className].filter(Boolean).join(' ')}"`,
     'data-state="idle"',

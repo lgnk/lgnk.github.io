@@ -18,6 +18,10 @@ describe('arquivos da marca', () => {
     expect(svg).not.toContain('<animate');
   });
 
+  it('favicon recortado na grade: 1 pixel da nuvem = 1 px em 16 px (os olhos não somem)', () => {
+    expect(readFileSync(join(DIST, 'favicon.svg'), 'utf8')).toContain('viewBox="12 15 96 96"');
+  });
+
   it('símbolo, avatar e logo publicados', () => {
     expect(readFileSync(join(DIST, 'marca', 'simbolo.svg'), 'utf8')).toContain('viewBox="0 0 120 120"');
     expect(readFileSync(join(DIST, 'marca', 'avatar.svg'), 'utf8')).toContain('#FFD23F');
