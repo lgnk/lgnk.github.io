@@ -8,6 +8,8 @@ export type MascotState = 'idle' | 'proc' | 'done';
 export interface MascotOptions {
   /** Liga as animações SMIL (piscar, cursor, olhos varrendo, barra de carregamento, pulinho). Padrão: parado. */
   animated?: boolean;
+  /** Com animações, elas só começam quando um script chamar beginElement() — sem JS, a nuvem fica parada. */
+  manualStart?: boolean;
   /** Estados desenhados; cada um vira `<g class="f-<estado>">`. Padrão: só "esperando". */
   states?: MascotState[];
   /** Com título, o SVG é uma imagem com nome; sem, é decorativo (aria-hidden). */
@@ -106,7 +108,7 @@ function done(): string {
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export function mascotSvg(options: MascotOptions = {}): string {
-  const { animated = false, states = ['idle'], title, background, id, className } = options;
+  const { animated = false, manualStart = false, states = ['idle'], title, background, id, className } = options;
   const faces: Record<MascotState, () => string> = { idle: () => idle(animated), proc: () => proc(animated), done };
 
   const attrs = [
@@ -132,5 +134,6 @@ export function mascotSvg(options: MascotOptions = {}): string {
   const body = BODY.map((r) => rect(r)).join('');
   const groups = states.map((s) => `<g class="f-${s}">${faces[s]()}</g>`).join('');
 
-  return `<svg ${attrs.join(' ')}>${title ? `<title>${escape(title)}</title>` : ''}${bg}<g>${bounce}${body}${groups}</g></svg>`;
+  const svg = `<svg ${attrs.join(' ')}>${title ? `<title>${escape(title)}</title>` : ''}${bg}<g>${bounce}${body}${groups}</g></svg>`;
+  return manualStart ? svg.replace(/<animate(Transform)? /g, (tag) => `${tag}begin="indefinite" `) : svg;
 }

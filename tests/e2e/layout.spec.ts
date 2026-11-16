@@ -17,6 +17,7 @@ test('funciona sem JavaScript', async ({ browser }) => {
   const page = await context.newPage();
   await page.goto('http://localhost:4322/');
   await expect(page.locator('h1')).toBeVisible();
+  await expect(page.locator('#heroMascot')).toBeVisible();
   const hrefs = await page.locator('a[data-whatsapp]').evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? ''));
   expect(hrefs.length).toBeGreaterThanOrEqual(2);
   for (const h of hrefs) expect(h).toMatch(/^https:\/\/wa\.me\//);

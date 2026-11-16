@@ -31,6 +31,13 @@ describe('mascotSvg', () => {
     expect(s).not.toContain('aria-hidden');
   });
 
+  it('com partida manual, nenhuma animação começa sozinha (sem JS o mascote fica parado)', () => {
+    const s = mascotSvg({ animated: true, manualStart: true, states: ['idle', 'proc', 'done'] });
+    const anims = s.match(/<animate(Transform)?\b[^>]*>/g) ?? [];
+    expect(anims.length).toBeGreaterThan(0);
+    for (const a of anims) expect(a).toContain('begin="indefinite"');
+  });
+
   it('escapa o título', () => {
     expect(mascotSvg({ title: 'a < b & "c"' })).toContain('<title>a &lt; b &amp; &quot;c&quot;</title>');
   });
