@@ -5,6 +5,7 @@
 //   public/apple-touch-icon.png (180) e public/icon-512.png → ícone ao salvar na tela inicial
 //   marca/whatsapp-perfil.png → foto de perfil do WhatsApp Business (1024, folga para o círculo)
 //   marca/whatsapp-capa.png   → capa do perfil do WhatsApp Business (2422×1362, 16:9)
+//   marca/whatsapp-capa-empresa.png → capa "sobre a empresa": serviços e integrações (2422×1362, 16:9)
 // Rode: yarn build && node scripts/marca.mjs
 import { chromium } from '@playwright/test';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
@@ -55,6 +56,12 @@ await capa.goto(new URL('scripts/whatsapp-capa.html', root).href, { waitUntil: '
 await capa.evaluate(() => document.fonts.ready);
 await capa.screenshot({ path: file('marca/whatsapp-capa.png') });
 
+// Capa "sobre a empresa": mesma moldura, com os serviços (ícones de pixel) e as integrações.
+const empresa = await browser.newPage({ viewport: { width: 1211, height: 681 }, deviceScaleFactor: 2 });
+await empresa.goto(new URL('scripts/whatsapp-capa-empresa.html', root).href, { waitUntil: 'networkidle' });
+await empresa.evaluate(() => document.fonts.ready);
+await empresa.screenshot({ path: file('marca/whatsapp-capa-empresa.png') });
+
 // Imagem de compartilhamento.
 const og = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 await og.goto(new URL('scripts/og.html', root).href, { waitUntil: 'networkidle' });
@@ -62,4 +69,4 @@ await og.evaluate(() => document.fonts.ready);
 await og.screenshot({ path: file('public/og.png') });
 
 await browser.close();
-console.log('marca/avatar-1024.png, marca/logo.png, public/og.png e ícones de tela inicial gerados.');
+console.log('marca/avatar-1024.png, marca/logo.png, capas do WhatsApp, public/og.png e ícones de tela inicial gerados.');

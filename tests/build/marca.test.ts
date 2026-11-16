@@ -33,9 +33,18 @@ describe('arquivos da marca', () => {
     expect(logo).toContain('>sistemas<');
   });
 
+  it('cada ícone de pixel do site também sai como arquivo da marca', () => {
+    for (const name of ['sistema', 'maquininha', 'loja', 'manutencao', 'conversa', 'proposta', 'construcao', 'entrega', 'custo', 'tempo', 'dono', 'caminho', 'escudo']) {
+      const svg = readFileSync(join(DIST, 'marca', `icone-${name}.svg`), 'utf8');
+      expect(svg, name).toContain('xmlns="http://www.w3.org/2000/svg"');
+      expect(svg, name).toContain('shape-rendering="crispEdges"');
+    }
+  });
+
   it('PNGs da marca nos tamanhos certos', () => {
     expect(pngSize(repo('marca/avatar-1024.png'))).toEqual([1024, 1024]);
     expect(existsSync(repo('marca/logo.png'))).toBe(true);
+    expect(pngSize(repo('marca/whatsapp-capa-empresa.png'))).toEqual([2422, 1362]);
   });
 
   it('o cabeçalho aponta o favicon', () => {

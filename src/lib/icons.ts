@@ -282,8 +282,11 @@ export type ProcessIcon = keyof typeof PROCESS_ICONS;
 export type FaqIcon = keyof typeof FAQ_ICONS;
 export type PixelIcon = keyof typeof PIXEL_ICONS;
 
-/** SVG decorativo do ícone: um caminho por cor, juntando os pixels vizinhos da mesma linha. */
-export function pixelIconSvg(name: PixelIcon, className = ''): string {
+/**
+ * SVG decorativo do ícone: um caminho por cor, juntando os pixels vizinhos da mesma linha.
+ * `standalone` declara o namespace, para o arquivo avulso da marca (marca/icone-*.svg).
+ */
+export function pixelIconSvg(name: PixelIcon, className = '', { standalone = false } = {}): string {
   const paths = new Map<string, string>();
   PIXEL_ICONS[name].forEach((row, y) => {
     for (let x = 0; x < row.length; ) {
@@ -299,5 +302,6 @@ export function pixelIconSvg(name: PixelIcon, className = ''): string {
   });
   const body = [...paths].map(([ch, d]) => `<path fill="${COLORS[ch]}" d="${d}"/>`).join('');
   const cls = ['pixel-icon', className].filter(Boolean).join(' ');
-  return `<svg class="${cls}" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true" focusable="false">${body}</svg>`;
+  const ns = standalone ? 'xmlns="http://www.w3.org/2000/svg" ' : '';
+  return `<svg ${ns}class="${cls}" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true" focusable="false">${body}</svg>`;
 }

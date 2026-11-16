@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<!-- Gerador local da capa "sobre a empresa" do WhatsApp Business (marca/whatsapp-capa-empresa.png). Não faz parte do site.
+     Rode: yarn build && node scripts/marca.mjs  ·  Quadro 1211×681 (16:9), renderizado em 2×.
+     O que importa fica no alto e no meio; a faixa de baixo fica livre para o círculo da foto do perfil. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@700&display=block" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    width: 1211px; height: 681px; overflow: hidden; background: #FFF8EC; color: #1B1A24;
+    font-family: 'Inter Tight', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 84px;
+  }
+  .logo { height: 58px; image-rendering: pixelated; }
+  h1 { margin-top: 26px; font-size: 54px; font-weight: 800; letter-spacing: -0.045em; line-height: 1; white-space: nowrap; }
+  mark { background: #FFD23F; color: inherit; padding: 0 0.08em; }
+  .sub { margin-top: 14px; font-size: 21px; font-weight: 500; color: #5E5A6B; }
+  .cards { display: flex; gap: 22px; margin-top: 32px; }
+  .card {
+    width: 236px; display: flex; align-items: center; gap: 14px; padding: 16px 16px; background: #FFFFFF;
+    border: 2.5px solid #1B1A24; box-shadow: 5px 5px 0 #1B1A24; font-size: 20px; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em;
+  }
+  .card img { width: 48px; height: 48px; flex: none; image-rendering: pixelated; }
+  .with { display: flex; align-items: center; gap: 14px; margin-top: 34px; }
+  .with span { font: 700 16px/1 'JetBrains Mono', monospace; color: #5A30D9; margin-right: 4px; white-space: nowrap; }
+  .with b { font-size: 19px; font-weight: 700; padding: 8px 12px; border: 2.5px solid #1B1A24; background: #FFFFFF; white-space: nowrap; }
+  .site { position: absolute; right: 40px; bottom: 34px; font: 700 18px/1 'JetBrains Mono', monospace; background: #1B1A24; color: #FFF8EC; padding: 10px 13px; }
+</style>
+</head>
+<body>
+  <img class="logo" src="../dist/marca/logo.svg" alt="" />
+  <h1>Menos fila, menos planilha, mais <mark>venda</mark>.</h1>
+  <p class="sub">Sistemas, apps e sites sob medida para pequenas e médias empresas.</p>
+
+  <div class="cards">
+    <div class="card"><img src="../dist/marca/icone-sistema.svg" alt="" />Sistema sob medida</div>
+    <div class="card"><img src="../dist/marca/icone-maquininha.svg" alt="" />App e maquininha</div>
+    <div class="card"><img src="../dist/marca/icone-loja.svg" alt="" />Site e loja virtual</div>
+    <div class="card"><img src="../dist/marca/icone-manutencao.svg" alt="" />Manutenção</div>
+  </div>
+
+  <div class="with" data-integracoes>
+    <span>// integramos com</span>
+    <b>Stone</b><b>PagBank</b><b>Mercado Pago</b><b>Stripe</b><b>Pagar.me</b><b>Safe2Pay</b>
+  </div>
+
+  <span class="site">lgnk.com.br</span>
+</body>
+</html>

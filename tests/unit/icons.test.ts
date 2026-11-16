@@ -47,6 +47,11 @@ describe('ícones de pixel', () => {
     }
   });
 
+  it('como arquivo avulso (marca/icone-*.svg) o SVG declara o namespace', () => {
+    expect(pixelIconSvg('loja', '', { standalone: true })).toMatch(/^<svg xmlns="http:\/\/www.w3.org\/2000\/svg" /);
+    expect(pixelIconSvg('loja')).not.toContain('xmlns');
+  });
+
   it('cada cor vira um caminho só', () => {
     const svg = pixelIconSvg('sistema');
     const fills = [...svg.matchAll(/fill="([^"]+)"/g)].map((m) => m[1]);
