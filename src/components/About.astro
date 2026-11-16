@@ -9,7 +9,13 @@ const photo = Object.values(photos)[0]?.default;
   <div class="wrap about">
     {
       photo ? (
-        <Image src={photo} width={240} alt="Ian Langkammer" class="photo" />
+        <Image
+          src={photo}
+          widths={[240, 360, 480, 560]}
+          sizes="(min-width: 768px) 280px, 240px"
+          alt="Ian Langkammer, fundador da LGNK, programando no notebook"
+          class="photo"
+        />
       ) : (
         <div class="monogram" aria-hidden="true">IL</div>
       )
@@ -22,14 +28,16 @@ const photo = Object.values(photos)[0]?.default;
         Engenheiro de software sênior e arquiteto. Lidera a arquitetura da Beerpass Club e criou o Avance Trainer do
         zero. Sistemas de Informação pela UFOP. Programando desde os 15 anos.
       </p>
+      <p class="direct">Do primeiro WhatsApp à entrega, você fala direto comigo.</p>
     </div>
   </div>
 </section>
 
 <style>
   .about { display: grid; gap: 24px; align-items: start; }
-  .monogram, .photo { width: 120px; height: 140px; object-fit: cover; }
-  .photo { border: var(--line); box-shadow: var(--shadow); }
+  .monogram, .photo { width: min(100%, 240px); height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  /* Recorte 4:5 que mantém o rosto: a foto é 2:3, então corta pouco de cima (o cabelo respira) e mais de baixo. */
+  .photo { object-position: 50% 15%; border: var(--line); box-shadow: var(--shadow); background: var(--ink); }
   .monogram {
     background: var(--yellow); border: var(--line); box-shadow: var(--shadow); display: grid; place-items: center;
     font-size: 2.5rem; font-weight: 800; letter-spacing: 0.06em;
@@ -37,8 +45,9 @@ const photo = Object.values(photos)[0]?.default;
   .name { font-size: clamp(1.625rem, 1rem + 1.3vw, 2rem); font-weight: 700; letter-spacing: -0.02em; }
   .role { color: var(--purple-ink); font-family: var(--font-mono); font-weight: 700; font-size: var(--text-sm); margin-top: 4px; }
   .bio { color: var(--muted); margin-top: 12px; max-width: 62ch; font-size: var(--text-lead); }
+  .direct { margin-top: 16px; font-size: var(--text-lead); font-weight: 700; }
   @media (min-width: 768px) {
-    .about { grid-template-columns: 160px 1fr; gap: 40px; }
-    .monogram, .photo { width: 160px; height: 190px; }
+    .about { grid-template-columns: 280px 1fr; gap: 48px; align-items: center; }
+    .monogram, .photo { width: 280px; }
   }
 </style>

@@ -63,6 +63,17 @@ describe('conteúdo da home', () => {
     expect(text(doc.querySelector('#quem-esta-por-tras'))).toContain('Ian Langkammer');
   });
 
+  it('quem está por trás tem a foto do Ian, otimizada, e diz que você fala direto com ele', () => {
+    const about = doc.querySelector('#quem-esta-por-tras')!;
+    expect(about.querySelector('.monogram')).toBeNull();
+    const img = about.querySelector('img.photo')!;
+    expect(img.getAttribute('alt')).toContain('Ian Langkammer');
+    expect(img.getAttribute('src')).toMatch(/\.webp$/);
+    expect(img.getAttribute('srcset')).toMatch(/\d+w/);
+    expect(img.getAttribute('loading')).toBe('lazy');
+    expect(text(about)).toContain('você fala direto comigo');
+  });
+
   it('serviços falam do problema resolvido, com saída para quem não sabe o que precisa', () => {
     const servicos = doc.querySelector('#servicos')!;
     expect(text(servicos.querySelector('h2'))).toBe('O que a gente resolve.');
