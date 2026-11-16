@@ -50,4 +50,11 @@ describe('marca nova no site', () => {
     expect(text(el)).toBe(label);
     expect(el.querySelector('span[aria-hidden="true"]')?.textContent).toBe('// ');
   });
+
+  it('barra de rolagem na cara da marca', () => {
+    const css = readdirSync(join(DIST, '_astro')).filter((f) => f.endsWith('.css')).map((f) => readFileSync(join(DIST, '_astro', f), 'utf8')).join('\n')
+      + allHtml().join('\n');
+    expect(css).toMatch(/::-webkit-scrollbar-thumb\{[^}]*background:var\(--purple\)/);
+    expect(css).toMatch(/scrollbar-color:var\(--purple\) var\(--cream\)/);
+  });
 });

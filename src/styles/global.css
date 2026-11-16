@@ -69,6 +69,16 @@ button { font: inherit; color: inherit; }
 :focus-visible { outline: 3px solid var(--purple-ink); outline-offset: 3px; }
 ::selection { background: var(--yellow); color: var(--ink); }
 
+/* Barra de rolagem na cara da marca: trilho creme, polegar roxo com borda e sombra de pixel. */
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-color: var(--purple) var(--cream); }
+}
+::-webkit-scrollbar { width: 14px; height: 14px; }
+::-webkit-scrollbar-track { background: var(--cream); border-left: 2px solid var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--purple); border: 2px solid var(--ink); box-shadow: inset -3px -3px 0 var(--purple-ink); }
+::-webkit-scrollbar-thumb:hover { background: var(--purple-ink); }
+::-webkit-scrollbar-corner { background: var(--cream); }
+
 /* Palavra de destaque dos títulos: marca-texto amarelo */
 mark { background: var(--yellow); color: var(--ink); padding: 0 0.1em; }
 

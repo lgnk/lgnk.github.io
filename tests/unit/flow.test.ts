@@ -23,11 +23,11 @@ describe('fluxo do topo', () => {
   });
 
   it('nextState segue os tempos', () => {
-    expect(TIMING).toEqual({ proc: 1700, done: 900 });
-    expect(nextState('proc', 1699, 0)).toBeNull();
-    expect(nextState('proc', 1700, 0)).toBe('done');
-    expect(nextState('done', 900, 0)).toBe('idle');
-    expect(nextState('done', 900, 2)).toBe('proc');
+    expect(TIMING).toEqual({ proc: 1100, done: 500 });
+    expect(nextState('proc', 1099, 0)).toBeNull();
+    expect(nextState('proc', 1100, 0)).toBe('done');
+    expect(nextState('done', 500, 0)).toBe('idle');
+    expect(nextState('done', 500, 2)).toBe('proc');
     expect(nextState('idle', 99999, 0)).toBeNull();
   });
 

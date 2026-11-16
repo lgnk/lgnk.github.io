@@ -16,8 +16,11 @@ const INS = ['pedido #312', 'Pix recebido', 'nova mensagem', 'estoque?', 'planil
 const OUTS = ['venda ✓', 'cliente avisado ✓', 'estoque em dia ✓', 'relatório pronto ✓', 'nota emitida ✓'];
 const LANES = [-0.34, -0.17, 0, 0.17, 0.34];
 const STREAM_FRACS = streamYs(18, 1);
-const CHIP_EVERY = 1500;
-const MAX_CHIPS = 10;
+const CHIP_EVERY = 650;
+const MAX_CHIPS = 16;
+/** Borda direita da nuvem, em frações da largura do mascote: a saída nasce colada nela. */
+const EDGE = 0.38;
+const CHIP_EDGE = 0.46;
 const MAX_RINGS = 6;
 const LABELS: Record<MascotState, string> = { idle: 'esperando pedidos_', proc: 'processando…', done: 'pronto! ✓' };
 
@@ -92,7 +95,7 @@ export function startHero(stage: HTMLElement): () => void {
       for (let t = 0; t < 0.96; t += 0.018) { pointIn(f * H, -8, t); g.fillRect(Math.round(px), Math.round(py), 2, 2); }
     }
     for (const lane of LANES) {
-      for (let t = 0.04; t < 1; t += 0.02) { pointOut(lane, mw * 0.3, 8, t); g.fillRect(Math.round(px), Math.round(py), 2, 2); }
+      for (let t = 0; t < 1; t += 0.02) { pointOut(lane, mw * EDGE, 8, t); g.fillRect(Math.round(px), Math.round(py), 2, 2); }
     }
   }
 
@@ -108,13 +111,16 @@ export function startHero(stage: HTMLElement): () => void {
   const spawnChipIn = () => {
     if (chips.length < MAX_CHIPS) chips.push({ kind: 'in', frac: 0.14 + Math.random() * 0.72, lane: 0, text: pick(INS), t: 0, sp: 0.0035 + Math.random() * 0.0015 });
   };
-  const spawnChipOut = () => {
-    if (chips.length < MAX_CHIPS) chips.push({ kind: 'out', frac: 0, lane: pick(LANES) * 0.85, text: pick(OUTS), t: 0, sp: 0.004 });
+  /** Um cartão de saída por pedido processado (até 3), em faixas diferentes e um pouco escalonados. */
+  const spawnChipsOut = (n: number) => {
+    const lanes = [...LANES].sort(() => Math.random() - 0.5);
+    for (let i = 0; i < n && chips.length < MAX_CHIPS; i++)
+      chips.push({ kind: 'out', frac: 0, lane: lanes[i] * 0.85, text: pick(OUTS), t: i * 0.07, sp: 0.004 });
   };
 
   function drawChip(c: Chip) {
     if (c.kind === 'in') pointIn(c.frac * H, -130, c.t);
-    else pointOut(c.lane, mw * 0.8, 160, c.t);
+    else pointOut(c.lane, mw * CHIP_EDGE, 160, c.t);
     const scale = c.kind === 'in' ? 1 - c.t * 0.65 : 0.55 + Math.min(c.t * 2, 0.45);
     ctx!.save();
     ctx!.globalAlpha = c.kind === 'in' && c.t > 0.85 ? (1 - c.t) / 0.15 : 1;
@@ -139,8 +145,9 @@ export function startHero(stage: HTMLElement): () => void {
   function drawParticles() {
     for (const p of parts) {
       if (p.kind === 'in') pointIn(p.frac * H + p.jit, -8, p.t);
-      else pointOut(p.lane, mw * 0.3, 8, p.t);
-      ctx!.globalAlpha = p.kind === 'in' ? Math.min(1, p.t * 6) * (p.t > 0.9 ? (1 - p.t) * 10 : 1) : Math.min(1, p.t * 8);
+      else pointOut(p.lane, mw * EDGE, 8, p.t);
+      // Entrada aparece aos poucos e some na cabeça; saída já nasce visível, colada na nuvem.
+      ctx!.globalAlpha = p.kind === 'in' ? Math.min(1, p.t * 6) * (p.t > 0.9 ? (1 - p.t) * 10 : 1) : 1;
       ctx!.fillStyle = p.col;
       ctx!.fillRect(Math.round(px), Math.round(py), p.s, p.s);
     }
@@ -157,13 +164,13 @@ export function startHero(stage: HTMLElement): () => void {
     // Nascimentos por tempo (≈1,7 de entrada e 0,3 de saída a cada quadro de 60 Hz), sempre dentro do limite.
     inAcc += 1.7 * k;
     for (; inAcc >= 1; inAcc--) if (parts.length < budget) spawnIn();
-    outAcc += 0.3 * k;
+    outAcc += 0.9 * k;
     for (; outAcc >= 1; outAcc--) if (parts.length < budget) spawnOut();
     if (now - lastChip > CHIP_EVERY) { spawnChipIn(); lastChip = now; }
 
     const next = nextState(state, now - stateAt, queued);
     if (next) {
-      if (state === 'proc') { spawnChipOut(); burstOut(10, 0.1); queued = 0; }
+      if (state === 'proc') { spawnChipsOut(Math.min(Math.max(queued, 1), 3)); burstOut(18, 0.1); queued = 0; }
       setState(next);
     }
 
@@ -239,7 +246,7 @@ export function startHero(stage: HTMLElement): () => void {
     mascot.classList.add('jump');
     setState('done');
     queued = 0;
-    spawnChipOut();
+    spawnChipsOut(1);
     burstOut(16, 0.15);
   };
   const onVisibility = () => { pageVisible = !document.hidden; update(); };

@@ -19,7 +19,7 @@ export function particleBudget(width: number, height: number): number {
 }
 
 /** Quanto tempo o mascote fica processando e comemorando (ms). */
-export const TIMING = { proc: 1700, done: 900 } as const;
+export const TIMING = { proc: 1100, done: 500 } as const;
 
 /** Próximo estado depois de `elapsedMs` no estado atual, ou null se ainda não muda. */
 export function nextState(state: MascotState, elapsedMs: number, queued: number): MascotState | null {
