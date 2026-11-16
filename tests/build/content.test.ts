@@ -23,7 +23,7 @@ describe('conteúdo da home', () => {
 
   it('tem as seções na ordem aprovada', () => {
     const ids = [...doc.querySelectorAll('section[id], footer[id]')].map((el) => el.id);
-    expect(ids).toEqual(['topo', 'servicos', 'trabalhos', 'como-trabalhamos', 'orcamento', 'quem-esta-por-tras', 'perguntas', 'contato']);
+    expect(ids).toEqual(['topo', 'servicos', 'trabalhos', 'clientes', 'como-trabalhamos', 'orcamento', 'quem-esta-por-tras', 'perguntas', 'contato']);
   });
 
   it('nenhum preço no site (decisão do Ian)', () => {
@@ -75,6 +75,17 @@ describe('conteúdo da home', () => {
       'Não sei se preciso de site, app ou sistema.',
       'E se der problema depois?',
     ]);
+  });
+
+  it('clientes e integrações: quem já contou com a gente e com quem a gente já integrou', () => {
+    const sec = doc.querySelector('#clientes')!;
+    expect(text(sec.querySelector('h2'))).toBe('Quem já contou com a gente.');
+    const clients = [...sec.querySelectorAll('.clients li strong')].map(text);
+    for (const c of ['Beerpass Club', 'InkaBoxe', 'Pedro Porto Studios', 'Silver Schuffner', 'JM Calçados']) expect(clients).toContain(c);
+    expect(clients).not.toContain('Avance Trainer');
+    const integrations = [...sec.querySelectorAll('.integrations li')].map(text);
+    for (const i of ['Stone', 'PagBank', 'Mercado Pago', 'Stripe', 'Pagar.me', 'Safe2Pay']) expect(integrations).toContain(i);
+    expect(sec.querySelectorAll('[data-reveal]').length).toBeGreaterThan(0);
   });
 
   it('quanto custa: proposta por escrito depois de uma conversa, sem número', () => {

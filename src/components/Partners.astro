@@ -1,0 +1,66 @@
+---
+import { clients, integrations } from '../data/parceiros';
+import { pixelIconSvg } from '../lib/icons';
+---
+
+<section id="clientes" class="section">
+  <div class="wrap">
+    <p class="label" data-reveal="type"><span aria-hidden="true">// </span>clientes e integrações</p>
+    <h2 class="section-title" data-reveal="title" style="--i: 1">Quem já contou com a gente.</h2>
+    <ul class="clients">
+      {
+        clients.map((c, i) => (
+          <li data-reveal="pop" style={`--i: ${i % 5}`}>
+            <strong>{c.name}</strong>
+            <span>{c.segment}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="integrations">
+      <h3 data-reveal="up">Já integramos com</h3>
+      {
+        integrations.map((g) => (
+          <div class="group" data-reveal="up">
+            <p class="group-name">
+              <Fragment set:html={pixelIconSvg(g.icon, 'group-icon')} />
+              {g.group}
+            </p>
+            <ul>
+              {g.names.map((n) => (
+                <li>{n}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .clients { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 40px; }
+  .clients li { padding: 18px 18px 20px; background: var(--white); border: var(--line); box-shadow: var(--shadow); }
+  .clients strong { display: block; font-size: var(--text-h3); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+  .clients span { display: block; margin-top: 6px; font-size: var(--text-sm); color: var(--muted); }
+
+  .integrations { margin-top: clamp(48px, 7vw, 72px); }
+  .integrations h3 { font-size: clamp(1.375rem, 1rem + 1vw, 1.75rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+  .group { margin-top: 20px; }
+  .group-name {
+    display: flex; align-items: center; gap: 10px;
+    font: 700 var(--text-sm)/1 var(--font-mono); color: var(--purple-ink);
+  }
+  /* 32 px = 2 px por pixel do desenho. */
+  .group-name :global(.group-icon) { width: 32px; height: 32px; flex: none; }
+  .group ul { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .group li { padding: 10px 14px; background: var(--white); border: var(--line); font-size: var(--text-lead); font-weight: 700; }
+
+  @media (min-width: 768px) {
+    .clients { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  }
+  @media (min-width: 1100px) {
+    .clients { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
+  }
+</style>
