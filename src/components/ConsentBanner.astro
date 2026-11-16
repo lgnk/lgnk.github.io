@@ -19,12 +19,32 @@
   .inner { display: grid; gap: 14px; padding-block: 16px; font-size: var(--text-ui); }
   a { color: var(--cream); text-underline-offset: 3px; }
   .actions { display: flex; gap: 12px; }
-  button { cursor: pointer; padding: 9px 16px; font-weight: 700; font-size: var(--text-ui); border: 2px solid var(--cream); }
+  button {
+    cursor: pointer; padding: 9px 16px; font-weight: 700; font-size: var(--text-ui); border: 2px solid var(--cream);
+    transition: background-color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out), box-shadow var(--dur-hover) var(--ease-out);
+  }
   .accept { background: var(--yellow); color: var(--ink); border-color: var(--yellow); box-shadow: 3px 3px 0 var(--purple); }
   .deny { background: transparent; color: var(--cream); }
   .accept:hover { background: var(--cream); border-color: var(--cream); }
   .deny:hover { color: var(--yellow); border-color: var(--yellow); }
   #consent :focus-visible { outline-color: var(--yellow); }
+  @media (prefers-reduced-motion: no-preference) {
+    .accept:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--purple); }
+    .accept:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--purple); transition-duration: var(--dur-press); }
+  }
+
+  /* Entra subindo de baixo e assenta; sai descendo, mais rápido. Com movimento reduzido, só esmaece. */
+  #consent:not([hidden]) { animation: consent-in var(--dur-enter) var(--ease-out) both; }
+  #consent.consent--out { animation: consent-out var(--dur-exit) var(--ease-in) both; }
+  @media (prefers-reduced-motion: reduce) {
+    #consent:not([hidden]) { animation-name: consent-fade-in; }
+    #consent.consent--out { animation-name: consent-fade-out; }
+  }
+  @keyframes consent-in { from { transform: translateY(100%); } }
+  @keyframes consent-out { to { transform: translateY(100%); } }
+  @keyframes consent-fade-in { from { opacity: 0; } }
+  @keyframes consent-fade-out { to { opacity: 0; } }
   @media (min-width: 768px) {
     .inner { grid-template-columns: 1fr auto; align-items: center; gap: 32px; }
   }

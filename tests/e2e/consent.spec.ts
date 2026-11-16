@@ -71,3 +71,36 @@ test('storage bloqueado não quebra', async ({ page }) => {
   await expect(banner).toBeHidden();
   expect(errors).toEqual([]);
 });
+
+test('o aviso sobe deslizando e desce antes de sumir', async ({ page }) => {
+  await page.goto('/');
+  const banner = page.locator('#consent');
+  await expect(banner).toBeVisible();
+  expect(await banner.evaluate((el) => getComputedStyle(el).animationName)).toBe('consent-in');
+  const leaving = await banner.evaluate((el: HTMLElement) => {
+    el.querySelector<HTMLButtonElement>('button[data-consent="denied"]')!.click();
+    return { hidden: el.hidden, animation: getComputedStyle(el).animationName };
+  });
+  expect(leaving).toEqual({ hidden: false, animation: 'consent-out' });
+  await expect(banner).toBeHidden();
+});
+
+test('reabrir no meio da saída cancela a saída', async ({ page }) => {
+  await page.goto('/');
+  const banner = page.locator('#consent');
+  await banner.getByRole('button', { name: 'Aceitar' }).click();
+  await page.getByRole('button', { name: 'Preferências de cookies' }).evaluate((b: HTMLButtonElement) => b.click());
+  await page.waitForTimeout(600);
+  await expect(banner).toBeVisible();
+  expect(await banner.evaluate((el) => getComputedStyle(el).animationName)).toBe('consent-in');
+});
+
+test('com movimento reduzido o aviso só esmaece', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const banner = page.locator('#consent');
+  await expect(banner).toBeVisible();
+  expect(await banner.evaluate((el) => getComputedStyle(el).animationName)).toBe('consent-fade-in');
+  await banner.getByRole('button', { name: 'Recusar' }).click();
+  await expect(banner).toBeHidden();
+});

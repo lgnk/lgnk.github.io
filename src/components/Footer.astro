@@ -34,10 +34,13 @@ import WhatsAppLink from './WhatsAppLink.astro';
   .cta-sub { margin-top: 14px; font-size: var(--text-lead); color: var(--footer-small); }
   .contact { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; margin-top: 32px; font-size: var(--text-lead); }
   .contact-link { text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
+  .contact-link:hover { color: var(--yellow); text-underline-offset: 2px; }
   .legal { margin-top: 56px; padding-top: 20px; border-top: 2px solid var(--ink-line); font-size: var(--text-sm); color: var(--footer-small); display: grid; gap: 10px; }
   .legal-links { display: flex; flex-wrap: wrap; gap: 0 24px; }
   .legal-links a, .legal-links button { display: inline-block; min-height: 44px; padding-block: 11px; color: var(--footer-small); text-decoration: underline; text-underline-offset: 3px; }
   .legal-links button { background: none; border: 0; padding-inline: 0; cursor: pointer; }
+  .legal-links button { transition: color var(--dur-hover) var(--ease-out); }
+  .legal-links a:hover, .legal-links button:hover { color: var(--cream); }
   .site-footer :focus-visible { outline-color: var(--yellow); }
-  .site-footer .btn { border-color: var(--yellow); box-shadow: 4px 4px 0 var(--purple); }
+  .site-footer .btn { --btn-shadow: var(--purple); border-color: var(--yellow); }
 </style>

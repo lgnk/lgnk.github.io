@@ -34,18 +34,41 @@ function syncSpace() {
   document.documentElement.style.scrollPaddingBottom = height ? `${height}px` : '';
 }
 
+/** Saída em andamento: chamar cancela a animação e deixa o banner onde está. */
+let leaving: (() => void) | null = null;
+
 function show(from: HTMLElement | null = null) {
   if (!banner) return;
+  leaving?.();
   banner.hidden = false;
   syncSpace();
   opener = from;
   if (from) banner.querySelector<HTMLButtonElement>('button[data-consent]')?.focus();
 }
 
+/** Desce o banner e só depois o esconde. Sem animação (ou se ela não terminar), esconde na hora. */
 function hide() {
-  if (!banner) return;
-  banner.hidden = true;
-  syncSpace();
+  if (!banner || banner.hidden || leaving) return;
+  const el = banner;
+  const onEnd = (event: AnimationEvent) => {
+    if (event.target === el) finish();
+  };
+  const timer = window.setTimeout(() => finish(), 600);
+  const cancel = () => {
+    el.removeEventListener('animationend', onEnd);
+    window.clearTimeout(timer);
+    el.classList.remove('consent--out');
+    leaving = null;
+  };
+  const finish = () => {
+    cancel();
+    el.hidden = true;
+    syncSpace();
+  };
+  leaving = cancel;
+  el.classList.add('consent--out');
+  if (getComputedStyle(el).animationName === 'none') finish();
+  else el.addEventListener('animationend', onEnd);
   opener?.focus();
   opener = null;
 }

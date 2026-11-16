@@ -104,7 +104,9 @@ const groups = [
   .chip {
     position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px;
     background: var(--white); border: var(--line); font-weight: 600; font-size: var(--text-ui); cursor: pointer;
+    transition: background-color var(--dur-hover) var(--ease-out), box-shadow var(--dur-hover) var(--ease-out);
   }
+  .chip:hover { background: var(--cream); }
   .chip input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
   .chip:has(input:checked) { background: var(--yellow); box-shadow: var(--shadow-sm); }
   .chip:has(input:focus-visible) { outline: 3px solid var(--purple-ink); outline-offset: 3px; }
