@@ -1,15 +1,27 @@
 ---
-const services = [
+import { pixelIconSvg, type ServiceIcon } from '../lib/icons';
+
+const services: { icon: ServiceIcon; title: string; text: string }[] = [
   {
+    icon: 'sistema',
     title: 'Sistema sob medida',
     text: 'Pedidos, estoque, agenda e financeiro num lugar só, do jeito que a sua empresa já trabalha. Chega de planilha.',
   },
   {
+    icon: 'maquininha',
     title: 'App e maquininha',
     text: 'Seu cliente compra pelo celular e paga na maquininha ou no Pix. A gente integra com Stone, PagBank e Mercado Pago.',
   },
-  { title: 'Site e loja virtual', text: 'Vitrine, catálogo ou loja com pedido direto no WhatsApp. O jeito mais rápido de começar com a gente.' },
-  { title: 'Manutenção', text: 'Correções, melhorias, servidor e backup todo mês. Deu problema, a gente responde em até 1 dia útil.' },
+  {
+    icon: 'loja',
+    title: 'Site e loja virtual',
+    text: 'Vitrine, catálogo ou loja com pedido direto no WhatsApp. O jeito mais rápido de começar com a gente.',
+  },
+  {
+    icon: 'manutencao',
+    title: 'Manutenção',
+    text: 'Correções, melhorias, servidor e backup todo mês. Deu problema, a gente responde em até 1 dia útil.',
+  },
 ];
 ---
 
@@ -21,6 +33,7 @@ const services = [
       {
         services.map((s) => (
           <li>
+            <Fragment set:html={pixelIconSvg(s.icon, 'service-icon')} />
             <h3>{s.title}</h3>
             <p>{s.text}</p>
           </li>
@@ -35,6 +48,8 @@ const services = [
 </section>
 
 <style>
+  /* 48 px = cada pixel do desenho vira 3 px de tela, sem borrar. */
+  .grid4 :global(.service-icon) { display: block; width: 48px; height: 48px; margin-bottom: 18px; }
   .unsure { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 32px; }
   .unsure p { font-size: var(--text-lead); font-weight: 700; max-width: 46ch; }
 </style>

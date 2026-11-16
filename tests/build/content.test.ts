@@ -40,6 +40,17 @@ describe('conteúdo da home', () => {
     expect(doc.querySelector('#servicos .price')).toBeNull();
   });
 
+  it('cada serviço abre com o seu ícone de pixel, decorativo', () => {
+    const cards = [...doc.querySelectorAll('#servicos li')];
+    const icons = cards.map((li) => li.firstElementChild);
+    for (const icon of icons) {
+      expect(icon?.tagName.toLowerCase()).toBe('svg');
+      expect(icon?.getAttribute('class')).toContain('service-icon');
+      expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    }
+    expect(new Set(icons.map((i) => i?.innerHTML)).size).toBe(4);
+  });
+
   it('quanto custa: proposta por escrito depois de uma conversa, sem número', () => {
     expect(body).toContain('Depende do que você precisa.');
   });
