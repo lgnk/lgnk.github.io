@@ -64,6 +64,6 @@ export const integrations: IntegrationGroup[] = [
   {
     group: 'Inteligência artificial',
     icon: 'chip',
-    items: [symbol('OpenAI', 'openai'), symbol('Google Gemini', 'gemini')],
+    items: [symbol('OpenAI', 'openai'), symbol('Google Gemini', 'gemini'), symbol('Claude', 'claude')],
   },
 ];
