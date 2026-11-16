@@ -6,9 +6,11 @@ interface Props {
   label: string;
   /** solid: cabeçalho (pequeno, roxo) · primary: topo (grande, roxo) · footer: rodapé (amarelo) */
   variant: 'solid' | 'primary' | 'footer';
+  /** Onde o botão está, para o Clarity saber qual chamada converte. */
+  cta: string;
 }
 
-const { label, variant } = Astro.props;
+const { label, variant, cta } = Astro.props;
 const href = whatsappUrl(site.whatsapp.number, site.whatsapp.message);
 const classes = {
   solid: 'btn btn--primary btn--sm',
@@ -17,6 +19,6 @@ const classes = {
 }[variant];
 ---
 
-<a data-whatsapp href={href} target="_blank" rel="noopener noreferrer" class:list={['wa', classes]}>
+<a data-whatsapp data-cta={cta} href={href} target="_blank" rel="noopener noreferrer" class:list={['wa', classes]}>
   {label}<span class="sr-only"> (abre o WhatsApp em nova aba)</span>
 </a>

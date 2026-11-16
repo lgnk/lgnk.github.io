@@ -1,0 +1,145 @@
+---
+import Mascot from './Mascot.astro';
+import { site } from '../config';
+import { QUOTE_OPTIONS, QUOTE_TEMPLATE } from '../lib/quote';
+import { whatsappUrl } from '../lib/whatsapp';
+
+const templateHref = whatsappUrl(site.whatsapp.number, QUOTE_TEMPLATE);
+const groups = [
+  { name: 'need', legend: 'O que você precisa?', type: 'radio', options: QUOTE_OPTIONS.need, hint: '' },
+  { name: 'pains', legend: 'O que mais atrapalha hoje?', type: 'checkbox', options: QUOTE_OPTIONS.pains, hint: 'pode marcar mais de um' },
+] as const;
+---
+
+<section id="orcamento" class="section quote">
+  <div class="wrap quote-grid">
+    <div>
+      <h2 class="section-title">Peça seu orçamento pelo WhatsApp</h2>
+      <p class="quote-lead">Marque o que você precisa. A nuvem monta a mensagem e você só toca em enviar.</p>
+
+      <!-- O montador só aparece com JavaScript; sem ele, o botão abre o WhatsApp com um roteiro em branco. -->
+      <form class="quote-form" data-quote-builder data-clarity-mask="true" hidden>
+        {
+          groups.map((g) => (
+            <fieldset>
+              <legend>{g.legend}</legend>
+              {g.hint && <p class="quote-hint">{g.hint}</p>}
+              <div class="chips">
+                {g.options.map((o) => (
+                  <label class="chip">
+                    <input type={g.type} name={g.name} value={o} />
+                    {o}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))
+        }
+        <div class="field">
+          <label for="quote-business">Seu negócio</label>
+          <input id="quote-business" name="business" type="text" maxlength="80" autocomplete="organization" placeholder="Ex.: loja de roupas em BH" />
+        </div>
+        <fieldset>
+          <legend>Pra quando?</legend>
+          <div class="chips">
+            {
+              QUOTE_OPTIONS.when.map((o) => (
+                <label class="chip">
+                  <input type="radio" name="when" value={o} />
+                  {o}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+    <div class="quote-side">
+      <div class="quote-card">
+        <div class="quote-card-head">
+          <Mascot animated manualStart states={['idle', 'proc', 'done']} id="quoteMascot" className="quote-cloud" />
+          <span class="quote-status" data-quote-status aria-hidden="true">esperando seu pedido_</span>
+        </div>
+        <p class="quote-preview-label">Sua mensagem</p>
+        <pre class="quote-preview" data-quote-preview aria-live="polite">{QUOTE_TEMPLATE}</pre>
+        <a
+          class="btn btn--primary quote-send"
+          data-whatsapp-quote
+          data-cta="orcamento"
+          data-number={site.whatsapp.number}
+          href={templateHref}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Enviar pelo WhatsApp →<span class="sr-only"> (abre o WhatsApp em nova aba)</span>
+        </a>
+      </div>
+      <ul class="quote-facts">
+        <li><strong>Resposta em até 1 dia útil.</strong> Sem compromisso.</li>
+        <li><strong>Você fala direto com quem constrói.</strong></li>
+        <li>Site ou loja virtual: <strong>a partir de {site.sitePriceFrom}</strong>.</li>
+        <li>Sistema sob medida: escopo, prazo e valor fechados <strong>por escrito</strong> depois do diagnóstico.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="quote-bar" data-quote-bar hidden>
+  <a class="btn btn--primary" href="#orcamento">Pedir orçamento →</a>
+</div>
+
+<script>
+  import '../scripts/quote';
+</script>
+
+<style>
+  .quote-grid { display: grid; gap: 32px; }
+  .quote-lead { margin-top: 14px; font-size: var(--text-lead); color: var(--muted); max-width: 46ch; }
+  .quote-form { margin-top: 28px; display: grid; gap: 22px; }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  legend, .field label { font-weight: 700; font-size: var(--text-base); margin-bottom: 10px; padding: 0; }
+  .field label { display: block; }
+  .quote-hint { font-size: var(--text-sm); color: var(--muted); margin: -6px 0 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px;
+    background: var(--white); border: var(--line); font-weight: 600; font-size: var(--text-ui); cursor: pointer;
+  }
+  .chip input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+  .chip:has(input:checked) { background: var(--yellow); box-shadow: var(--shadow-sm); }
+  .chip:has(input:focus-visible) { outline: 3px solid var(--purple-ink); outline-offset: 3px; }
+  .field input {
+    width: 100%; max-width: 440px; min-height: 48px; padding: 10px 12px; font: inherit; font-size: var(--text-base);
+    background: var(--white); border: var(--line); color: var(--ink); caret-color: var(--purple);
+  }
+  .field input::placeholder { color: var(--muted); }
+  .field input:focus-visible { outline: 3px solid var(--purple-ink); outline-offset: 2px; }
+
+  .quote-card { background: var(--white); border: var(--line); box-shadow: var(--shadow); padding: 18px; }
+  .quote-card-head { display: flex; align-items: center; gap: 10px; }
+  .quote-card-head :global(.quote-cloud) { width: 72px; height: 72px; flex: none; }
+  .quote-status { font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 7px 9px; }
+  .quote-preview-label { margin-top: 14px; font: 700 var(--text-sm)/1 var(--font-mono); color: var(--purple-ink); }
+  .quote-preview {
+    margin: 8px 0 18px; padding: 12px 14px; background: var(--cream); border: var(--line);
+    font: 500 var(--text-ui)/1.5 var(--font-sans); white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+  .quote-send { display: block; text-align: center; white-space: normal; }
+  .quote-facts { margin-top: 20px; display: grid; gap: 10px; }
+  .quote-facts li { padding-left: 18px; position: relative; }
+  .quote-facts li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; background: var(--purple); }
+
+  .quote-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 10px var(--gutter) 12px;
+    background: var(--cream); border-top: var(--line);
+  }
+  .quote-bar .btn { display: block; text-align: center; }
+  @media (min-width: 768px) {
+    .quote-bar { display: none !important; }
+  }
+  @media (min-width: 960px) {
+    .quote-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 56px; align-items: start; }
+    .quote-side { position: sticky; top: 24px; }
+  }
+</style>

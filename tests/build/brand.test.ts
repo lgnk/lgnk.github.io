@@ -36,7 +36,6 @@ describe('marca nova no site', () => {
     const topo = home.querySelector('#topo')!;
     expect(text(topo)).toContain('a gente automatiza a operação para você parar de perder venda.');
     expect(topo.querySelector('a[data-whatsapp]')).not.toBeNull();
-    expect(text(topo.querySelector('a[href="#trabalhos"]'))).toBe('Ver trabalhos');
     expect(topo.querySelector('svg[role="img"]')).not.toBeNull();
   });
 

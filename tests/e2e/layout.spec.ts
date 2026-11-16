@@ -35,17 +35,19 @@ test('foco visível', async ({ page }) => {
     const info = await page.evaluate(() => {
       const el = document.activeElement as HTMLElement | null;
       if (!el || el === document.body) return null;
-      const cs = getComputedStyle(el);
+      // Opções do montador: o input é invisível e o anel de foco aparece no "chip" que o envolve.
+      const chip = el.matches('input[type="radio"], input[type="checkbox"]') ? el.closest('.chip') : null;
+      const cs = getComputedStyle(chip ?? el);
       return {
         tag: el.tagName.toLowerCase(),
         outline: cs.outlineStyle,
         shadow: cs.boxShadow,
         heroWhatsApp: el.matches('#topo a[data-whatsapp]'),
-        label: (el.textContent ?? '').trim().slice(0, 40),
+        label: ((chip ?? el).textContent ?? '').trim().slice(0, 40) || el.getAttribute('name') || '',
       };
     });
     if (!info) continue;
-    expect(['a', 'button', 'summary'], info.label).toContain(info.tag);
+    expect(['a', 'button', 'summary', 'input'], info.label).toContain(info.tag);
     // Botões têm sombra dura fixa, então só o contorno prova que o foco aparece.
     expect(info.outline, `sem foco visível: ${info.label}`).not.toBe('none');
     if (info.heroWhatsApp) reachedHeroWhatsApp = true;

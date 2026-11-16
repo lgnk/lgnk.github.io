@@ -59,6 +59,10 @@ import { cases } from '../data/cases';
         })
       }
     </ol>
+    <div class="work-cta">
+      <p>Quer algo assim pra sua empresa?</p>
+      <a class="btn btn--primary" href="#orcamento">Pedir orçamento →</a>
+    </div>
   </div>
 </section>
 
@@ -75,6 +79,8 @@ import { cases } from '../data/cases';
   .arrow { font-size: 1.375rem; }
   .thumb { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border: var(--line); box-shadow: var(--shadow); }
   a.row:hover h3, a.row:hover .arrow { color: var(--purple-ink); }
+  .work-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 32px; }
+  .work-cta p { font-size: var(--text-lead); font-weight: 700; }
   @media (min-width: 768px) {
     .row { grid-template-columns: 1fr 34%; gap: 40px; align-items: center; padding: 28px 0; }
   }

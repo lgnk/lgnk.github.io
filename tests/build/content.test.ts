@@ -23,7 +23,7 @@ describe('conteúdo da home', () => {
 
   it('tem as seções na ordem aprovada', () => {
     const ids = [...doc.querySelectorAll('section[id], footer[id]')].map((el) => el.id);
-    expect(ids).toEqual(['topo', 'provas', 'servicos', 'trabalhos', 'como-trabalhamos', 'quem-esta-por-tras', 'perguntas', 'contato']);
+    expect(ids).toEqual(['topo', 'provas', 'servicos', 'trabalhos', 'como-trabalhamos', 'orcamento', 'quem-esta-por-tras', 'perguntas', 'contato']);
   });
 
   it('o único valor em reais é o do site vitrine', () => {

@@ -77,5 +77,8 @@ document.querySelectorAll<HTMLElement>('[data-open-consent]').forEach((button) =
 
 document.addEventListener('click', (event) => {
   const target = event.target as Element | null;
-  if (target?.closest?.('a[data-whatsapp]')) window.clarity?.('event', 'whatsapp_click');
+  const link = target?.closest?.<HTMLElement>('a[data-whatsapp], a[data-whatsapp-quote]');
+  if (!link) return;
+  window.clarity?.('set', 'cta', link.dataset.cta ?? 'outro');
+  window.clarity?.('event', 'whatsapp_click');
 });
