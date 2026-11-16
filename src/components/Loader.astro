@@ -1,11 +1,5 @@
 ---
 import Mascot from './Mascot.astro';
-
-// Ícone girando no lugar do rosto: 8 quadradinhos em anel (3×3 sem o meio), no sentido horário a partir do canto
-// de cima. Ficam no quadro de 120 da nuvem, centrados no rosto (60, 66), do tamanho dos pontinhos da etiqueta,
-// com 2 unidades de respiro entre eles.
-const RING: [number, number][] = [[0, 0], [1, 0], [2, 0], [2, 1], [2, 2], [1, 2], [0, 2], [0, 1]];
-const spin = RING.map(([col, row], k) => ({ x: 50.5 + col * 7, y: 56.5 + row * 7, delay: `${-((8 - k) / 10).toFixed(1)}s` }));
 ---
 
 <!--
@@ -15,19 +9,12 @@ const spin = RING.map(([col, row], k) => ({ x: 50.5 + col * 7, y: 56.5 + row * 7
 <div id="loader" class="loader" aria-hidden="true">
   <div class="loader-box">
     <div class="loader-face">
-      <Mascot animated manualStart states={['idle']} state="idle" className="loader-cloud" />
-      <svg class="loader-spinner" viewBox="0 0 120 120" shape-rendering="crispEdges">
-        {spin.map((q) => <rect x={q.x} y={q.y} width="5" height="5" fill="#FFD23F" style={`animation-delay: ${q.delay}`} />)}
-      </svg>
+      <Mascot states={['idle']} state="idle" className="loader-cloud" />
     </div>
-    <span class="loader-label">carregando<span class="loader-dots"><i></i><i></i><i></i></span></span>
+    <span class="loader-label">carregando…</span>
   </div>
 </div>
 <noscript><style>#loader { display: none; }</style></noscript>
-<script is:inline>
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
-    document.querySelectorAll('#loader animate').forEach(function (a) { a.beginElement(); });
-</script>
 
 <style>
   .loader {
@@ -35,42 +22,35 @@ const spin = RING.map(([col, row], k) => ({ x: 50.5 + col * 7, y: 56.5 + row * 7
     background: var(--cream); animation: loader-in 0.2s ease-out 0.4s both;
   }
   .loader-box { display: grid; justify-items: center; gap: 4px; }
-  /*
-    Os três pontinhos são quadrados de pixel, não o caractere "…": o "…" fica na base da linha e, enquanto a fonte
-    não chega (justo quando esta tela aparece), vem da fonte reserva e entorta. Aqui eles ficam no meio da altura do texto.
-  */
+  /* Igual à etiqueta do topo ("processando…"): as reticências são parte do texto. */
   .loader-label {
-    display: inline-flex; align-items: center; gap: 5px;
     font: 700 var(--text-micro)/1 var(--font-mono); background: var(--ink); color: var(--cream); padding: 8px 10px;
     /* Esta tela só aparece enquanto a fonte do site não chegou: usa a mono do sistema, não a Courier da reserva. */
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
-  /* Parados. Amarelos e do tamanho dos quadradinhos do ícone girando: 5 unidades de 120 da nuvem. */
-  .loader-dots { display: inline-flex; gap: calc(var(--cloud) * 4 / 120); }
-  .loader-dots i { display: block; width: calc(var(--cloud) * 5 / 120); height: calc(var(--cloud) * 5 / 120); background: var(--yellow); }
   .loader { --cloud: 132px; }
-  .loader-face { position: relative; width: var(--cloud); height: var(--cloud); }
+  .loader-face { width: var(--cloud); height: var(--cloud); }
   .loader :global(.loader-cloud) { display: block; width: 100%; height: 100%; }
-  .loader-spinner { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
   @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
   @keyframes loader-out { to { opacity: 0; } }
 
   /*
-    Só a nuvem se mexe: cai em 4 quadros, flutua em 2 e, a cada 0,8 s, troca o rostinho por um ícone girando
-    (os quadradinhos acendem em roda, então o pixel não borra como numa rotação de verdade).
+    Só a nuvem se mexe: cai em 4 quadros, flutua em 2 e fica olhando para os lados enquanto carrega.
+    O rosto é sempre o mesmo; só os olhos (os dois primeiros quadrados do rosto) andam 1 pixel da nuvem.
   */
   @media (prefers-reduced-motion: no-preference) {
     .loader-face { animation: loader-drop 0.32s steps(4, end) 0.4s both, loader-bob 1s steps(1, end) 0.72s infinite; }
-    .loader-face :global(.f-idle) { animation: loader-show-face 1.6s steps(1, end) 0.72s infinite; }
-    .loader-spinner { animation: loader-show-spin 1.6s steps(1, end) 0.72s infinite; }
-    .loader-spinner rect { animation: loader-spin 0.8s steps(1, end) infinite; }
+    .loader-face :global(.f-idle rect:nth-of-type(-n + 2)) { animation: loader-look 2.4s steps(1, end) 0.72s infinite; }
   }
   @keyframes loader-drop { from { translate: 0 -36px; } to { translate: 0 0; } }
   @keyframes loader-bob { 50% { translate: 0 -4px; } }
-  @keyframes loader-show-face { 50% { opacity: 0; } }
-  @keyframes loader-show-spin { 50% { opacity: 1; } }
-  /* Cores chapadas, sem meio-termo (amarelo esmaecendo sobre roxo fica marrom): 2 quadradinhos amarelos correm num anel lilás. */
-  @keyframes loader-spin { 0% { fill: var(--yellow); } 25%, 100% { fill: var(--purple-light); } }
+  /* Frente, esquerda, frente, direita (em unidades da nuvem: 6 = 1 pixel dela). */
+  @keyframes loader-look {
+    0%, 90% { translate: 0 0; }
+    20% { translate: -6px 0; }
+    45% { translate: 0 0; }
+    65% { translate: 6px 0; }
+  }
 
   /* Saída: a tela fecha em 8 persianas, em 6 quadros, e mostra o site por trás. */
   @property --wipe { syntax: '<percentage>'; inherits: false; initial-value: 100%; }

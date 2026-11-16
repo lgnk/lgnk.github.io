@@ -4,14 +4,14 @@ import { join } from 'node:path';
 import { DIST, page, text } from './helpers';
 
 describe('tela de carregamento (só com internet lenta)', () => {
-  it.each(['/', '/privacidade/'])('%s abre com a nuvem e o ícone girando, escondida dos leitores de tela', (path) => {
+  it.each(['/', '/privacidade/'])('%s abre com a nuvem e "carregando…", escondida dos leitores de tela', (path) => {
     const doc = page(path);
     const loader = doc.body.firstElementChild!;
     expect(loader.id).toBe('loader');
     expect(loader.getAttribute('aria-hidden')).toBe('true');
     expect(loader.querySelector('svg.mascot[data-state="idle"]')).not.toBeNull();
-    expect(loader.querySelectorAll('svg.loader-spinner rect')).toHaveLength(8);
-    expect(text(loader)).toContain('carregando');
+    expect(loader.querySelector('svg.loader-spinner')).toBeNull();
+    expect(text(loader)).toBe('carregando…');
   });
 
   it('sem JavaScript a tela some', () => {
