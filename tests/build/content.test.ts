@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { page, text } from './helpers';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { DIST, page, text } from './helpers';
 
 const PROMISES = [
   'Sim, o código e os dados são da sua empresa.',
@@ -81,11 +83,32 @@ describe('conteúdo da home', () => {
     const sec = doc.querySelector('#clientes')!;
     expect(text(sec.querySelector('h2'))).toBe('Quem já contou com a gente.');
     const clients = [...sec.querySelectorAll('.clients li strong')].map(text);
-    for (const c of ['Beerpass Club', 'InkaBoxe', 'Pedro Porto Studios', 'Silver Schuffner', 'JM Calçados']) expect(clients).toContain(c);
+    for (const c of ['Beerpass Club', 'Inka Boxe', 'Pedro Porto Studios', 'Silver Schuffner', 'JM Calçados', 'Shelflix', 'Heineken']) expect(clients).toContain(c);
     expect(clients).not.toContain('Avance Trainer');
     const integrations = [...sec.querySelectorAll('.integrations li')].map(text);
-    for (const i of ['Stone', 'PagBank', 'Mercado Pago', 'Stripe', 'Pagar.me', 'Safe2Pay']) expect(integrations).toContain(i);
+    for (const i of ['Stone', 'PagBank', 'Mercado Pago', 'Stripe', 'Pagar.me', 'Safe2Pay', 'Asaas', 'Focus NFe', 'Melhor Envio', 'WhatsApp', 'OneSignal', 'Resend', 'OpenAI', 'Google Gemini'])
+      expect(integrations).toContain(i);
+    expect(integrations).not.toContain('Paystore');
+    expect([...sec.querySelectorAll('.group-name')].map(text)).toEqual([
+      'Pagamentos e maquininhas',
+      'Nota fiscal e frete',
+      'Mensagens e avisos',
+      'Inteligência artificial',
+    ]);
     expect(sec.querySelectorAll('[data-reveal]').length).toBeGreaterThan(0);
+  });
+
+  it('cada cliente e cada integração tem a logo em SVG, limpa e publicada', () => {
+    const sec = doc.querySelector('#clientes')!;
+    const items = [...sec.querySelectorAll('.clients li, .integrations li')];
+    expect(items.length).toBe(7 + 14);
+    for (const li of items) {
+      const src = li.querySelector('img')?.getAttribute('src') ?? '';
+      expect(src, text(li)).toMatch(/^\/logos\/[a-z0-9-]+\.svg$/);
+      const svg = readFileSync(join(DIST, src), 'utf8');
+      expect(svg, src).toContain('viewBox=');
+      expect(svg, src).not.toMatch(/<script|\son\w+=|javascript:|foreignObject/i);
+    }
   });
 
   it('quanto custa: proposta por escrito depois de uma conversa, sem número', () => {

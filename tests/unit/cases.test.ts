@@ -6,7 +6,11 @@ describe('cases', () => {
     expect(cases.map((c) => c.slug)).toEqual(['beerpass', 'avance', 'pedro-porto', 'inkaboxe', 'silver-schuffner', 'jm-atacado']);
   });
 
-  it('InkaBoxe e Silver Schuffner não têm link', () => {
+  it('Inka Boxe se escreve separado', () => {
+    expect(cases.find((c) => c.slug === 'inkaboxe')?.name).toBe('Inka Boxe');
+  });
+
+  it('Inka Boxe e Silver Schuffner não têm link', () => {
     expect(cases.find((c) => c.slug === 'inkaboxe')?.href).toBeNull();
     expect(cases.find((c) => c.slug === 'silver-schuffner')?.href).toBeNull();
   });

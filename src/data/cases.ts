@@ -68,7 +68,7 @@ export const cases: Case[] = [
   },
   {
     slug: 'inkaboxe',
-    name: 'InkaBoxe',
+    name: 'Inka Boxe',
     kind: 'Academia de boxe · check-in pelo rosto',
     problem: 'Fila no check-in da recepção, mensalidade vencida passando batido e internet que caía.',
     built: 'Um tablet na entrada que reconhece o aluno pelo rosto e mostra na hora se a mensalidade está em dia.',

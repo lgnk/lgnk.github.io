@@ -275,7 +275,30 @@ export const FAQ_ICONS = {
   ],
 } as const satisfies Record<string, readonly string[]>;
 
-export const PIXEL_ICONS = { ...SERVICE_ICONS, ...PROCESS_ICONS, ...FAQ_ICONS };
+/** Grupos de integração que não têm ícone em outra seção. */
+export const GROUP_ICONS = {
+  // Chip com um brilho no meio: inteligência artificial.
+  chip: [
+    '................',
+    '...P.P.P.P.P....',
+    '...P.P.P.P.P....',
+    '..ppppppppppP...',
+    '..ppppppppppP...',
+    'PPpppyyyyyppPPP.',
+    '..pppyykyyppP...',
+    'PPpppykkkyppPPP.',
+    '..pppyykyyppP...',
+    'PPpppyyyyyppPPP.',
+    '..ppppppppppP...',
+    '..PPPPPPPPPPP...',
+    '...P.P.P.P.P....',
+    '...P.P.P.P.P....',
+    '................',
+    '................',
+  ],
+} as const satisfies Record<string, readonly string[]>;
+
+export const PIXEL_ICONS = { ...SERVICE_ICONS, ...PROCESS_ICONS, ...FAQ_ICONS, ...GROUP_ICONS };
 
 export type ServiceIcon = keyof typeof SERVICE_ICONS;
 export type ProcessIcon = keyof typeof PROCESS_ICONS;

@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { DIST, page, text } from './helpers';
 
-const NAMES = ['Beerpass Club', 'Avance Trainer', 'Pedro Porto Studios', 'InkaBoxe', 'Silver Schuffner', 'JM Atacado'];
+const NAMES = ['Beerpass Club', 'Avance Trainer', 'Pedro Porto Studios', 'Inka Boxe', 'Silver Schuffner', 'JM Atacado'];
 const VIDEOS = ['avance', 'inkaboxe', 'pedro-porto'];
 const IMAGES = ['jm-atacado', 'silver-schuffner'];
 const LINKS: Record<string, string> = {

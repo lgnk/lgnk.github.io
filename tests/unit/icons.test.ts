@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { SERVICE_ICONS, PROCESS_ICONS, FAQ_ICONS, PIXEL_ICONS, pixelIconSvg, type PixelIcon } from '../../src/lib/icons';
+import { SERVICE_ICONS, PROCESS_ICONS, FAQ_ICONS, GROUP_ICONS, PIXEL_ICONS, pixelIconSvg, type PixelIcon } from '../../src/lib/icons';
 import { PALETTE } from '../../src/lib/palette';
 
 const NAMES = Object.keys(PIXEL_ICONS) as PixelIcon[];
@@ -9,7 +9,8 @@ describe('ícones de pixel', () => {
     expect(Object.keys(SERVICE_ICONS)).toEqual(['sistema', 'maquininha', 'loja', 'manutencao']);
     expect(Object.keys(PROCESS_ICONS)).toEqual(['conversa', 'proposta', 'construcao', 'entrega']);
     expect(Object.keys(FAQ_ICONS)).toEqual(['custo', 'tempo', 'dono', 'caminho', 'escudo']);
-    expect(NAMES).toHaveLength(13);
+    expect(Object.keys(GROUP_ICONS)).toEqual(['chip']);
+    expect(NAMES).toHaveLength(14);
   });
 
   it('nenhum desenho repetido', () => {

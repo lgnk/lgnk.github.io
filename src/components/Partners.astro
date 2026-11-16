@@ -10,9 +10,12 @@ import { pixelIconSvg } from '../lib/icons';
     <ul class="clients">
       {
         clients.map((c, i) => (
-          <li data-reveal="pop" style={`--i: ${i % 5}`}>
+          <li data-reveal="pop" style={`--i: ${i % 4}`}>
+            <span class="client-logo">
+              <img src={`/logos/${c.logo}.svg`} alt="" loading="lazy" decoding="async" />
+            </span>
             <strong>{c.name}</strong>
-            <span>{c.segment}</span>
+            <span class="segment">{c.segment}</span>
           </li>
         ))
       }
@@ -28,8 +31,11 @@ import { pixelIconSvg } from '../lib/icons';
               {g.group}
             </p>
             <ul>
-              {g.names.map((n) => (
-                <li>{n}</li>
+              {g.items.map((n) => (
+                <li class:list={{ wordmark: n.wordmark }} style={`--logo-h: ${n.height}px`}>
+                  <img src={`/logos/${n.logo}.svg`} alt="" loading="lazy" decoding="async" />
+                  <span class:list={{ 'sr-only': n.wordmark }}>{n.name}</span>
+                </li>
               ))}
             </ul>
           </div>
@@ -42,8 +48,13 @@ import { pixelIconSvg } from '../lib/icons';
 <style>
   .clients { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 40px; }
   .clients li { padding: 18px 18px 20px; background: var(--white); border: var(--line); box-shadow: var(--shadow); }
+  /* Logos num tom só (o preto do site): o desenho de cada marca, sem misturar as cores delas com a paleta. */
+  .clients img, .group img { filter: brightness(0); object-fit: contain; object-position: left center; }
+  /* Área de 56 px: marcas altas (luva, monograma) usam a altura toda; as largas encolhem até caber na largura. */
+  .client-logo { display: flex; align-items: center; height: 56px; margin-bottom: 16px; }
+  .client-logo img { height: 56px; width: auto; max-width: 100%; }
   .clients strong { display: block; font-size: var(--text-h3); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
-  .clients span { display: block; margin-top: 6px; font-size: var(--text-sm); color: var(--muted); }
+  .segment { display: block; margin-top: 6px; font-size: var(--text-sm); color: var(--muted); }
 
   .integrations { margin-top: clamp(48px, 7vw, 72px); }
   .integrations h3 { font-size: clamp(1.375rem, 1rem + 1vw, 1.75rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
@@ -55,12 +66,16 @@ import { pixelIconSvg } from '../lib/icons';
   /* 32 px = 2 px por pixel do desenho. */
   .group-name :global(.group-icon) { width: 32px; height: 32px; flex: none; }
   .group ul { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
-  .group li { padding: 10px 14px; background: var(--white); border: var(--line); font-size: var(--text-lead); font-weight: 700; }
+  .group li {
+    display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 8px 16px;
+    background: var(--white); border: var(--line); font-size: var(--text-lead); font-weight: 700;
+  }
+  .group li img { height: var(--logo-h, 24px); width: auto; }
 
   @media (min-width: 768px) {
     .clients { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
   }
   @media (min-width: 1100px) {
-    .clients { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
+    .clients { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
   }
 </style>
