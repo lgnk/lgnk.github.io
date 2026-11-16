@@ -3,7 +3,7 @@ import { cases } from '../../src/data/cases';
 
 describe('cases', () => {
   it('estão na ordem aprovada', () => {
-    expect(cases.map((c) => c.slug)).toEqual(['beerpass', 'avance', 'inkaboxe', 'jm-atacado', 'pedro-porto', 'silver-schuffner']);
+    expect(cases.map((c) => c.slug)).toEqual(['beerpass', 'avance', 'pedro-porto', 'silver-schuffner', 'jm-atacado', 'inkaboxe']);
   });
 
   it('InkaBoxe e Silver Schuffner não têm link', () => {
