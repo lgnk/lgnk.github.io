@@ -1,5 +1,4 @@
 import type { ImageMetadata } from 'astro';
-import beerpass from '../assets/cases/beerpass.jpg';
 import avance from '../assets/cases/avance.jpg';
 import inkaboxe from '../assets/cases/inkaboxe.jpg';
 import jmAtacado from '../assets/cases/jm-atacado.jpg';
@@ -32,18 +31,6 @@ export interface Case {
 // Fatos confirmados pelo Ian em docs/cases-fatos.md (local). Rascunhos ainda a confirmar: problema da JM Atacado,
 // do Pedro Porto e da Silver Schuffner.
 export const cases: Case[] = [
-  {
-    slug: 'beerpass',
-    name: 'Beerpass Club',
-    kind: 'Autoatendimento de chope',
-    problem: 'Fila para comprar e servir chope, mesmo com as torneiras de autoatendimento.',
-    built:
-      'Levamos o autoatendimento para as maquininhas Stone e PagBank (app Beerpass MESmart), com recarga no app do cliente pela Safe2Pay e estações de venda 24 horas.',
-    result: 'O cliente compra, recarrega e se serve sozinho, a qualquer hora.',
-    outcomes: ['Paga na maquininha', 'Recarga pelo app', 'Venda 24 horas'],
-    href: 'https://www.beerpassclub.com/',
-    media: { type: 'soon', poster: beerpass },
-  },
   {
     slug: 'avance',
     name: 'Avance Trainer',

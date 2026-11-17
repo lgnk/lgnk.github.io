@@ -24,9 +24,6 @@ export interface IntegrationGroup {
 
 /** Quem já contou com a gente. O Avance Trainer é produto próprio, por isso não entra aqui. */
 export const clients: Client[] = [
-  { name: 'Beerpass Club', segment: 'Autoatendimento de chope', logo: 'beerpass' },
-  { name: 'Heineken', segment: 'Cervejaria', logo: 'heineken' },
-  { name: 'Shelflix', segment: 'Missões em pontos de venda', logo: 'shelflix' },
   { name: 'Inka Boxe', segment: 'Academia de boxe', logo: 'inka-boxe' },
   { name: 'Pedro Porto Studios', segment: 'Moda e portfólio', logo: 'pedro-porto' },
   { name: 'Silver Schuffner', segment: 'Joias e gemas', logo: 'silver-schuffner' },

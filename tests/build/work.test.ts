@@ -3,11 +3,10 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { DIST, page, text } from './helpers';
 
-const NAMES = ['Beerpass Club', 'Avance Trainer', 'Pedro Porto Studios', 'Inka Boxe', 'Silver Schuffner', 'JM Atacado'];
+const NAMES = ['Avance Trainer', 'Pedro Porto Studios', 'Inka Boxe', 'Silver Schuffner', 'JM Atacado'];
 const VIDEOS = ['avance', 'inkaboxe', 'pedro-porto'];
 const IMAGES = ['jm-atacado', 'silver-schuffner'];
 const LINKS: Record<string, string> = {
-  'Beerpass Club': 'https://www.beerpassclub.com/',
   'Avance Trainer': 'https://avancetrainer.com',
   'JM Atacado': '/jm-atacado/',
   'Pedro Porto Studios': 'https://pedroportodesign.online',
@@ -23,7 +22,7 @@ describe('seção Trabalhos', () => {
     expect(text(section.querySelector('h2'))).toBe('O que a gente já construiu.');
   });
 
-  it('mostra os seis cases na ordem, sem numeração', () => {
+  it('mostra os cinco cases na ordem, sem numeração', () => {
     expect(items.map((a) => text(a.querySelector('h3')))).toEqual(NAMES);
     expect(section.querySelector('.num')).toBeNull();
   });
@@ -48,12 +47,6 @@ describe('seção Trabalhos', () => {
       expect(existsSync(join(DIST, 'cases', slug, 'video.webm')), slug).toBe(true);
       expect(existsSync(join(DIST, 'cases', slug, 'video.mp4')), slug).toBe(true);
     }
-  });
-
-  it('Beerpass: espaço reservado até o vídeo novo', () => {
-    const a = bySlug('beerpass');
-    expect(a.querySelector('video')).toBeNull();
-    expect(text(a.querySelector('.case-soon'))).toContain('vídeo novo em gravação');
   });
 
   it('JM e Silver: foto com descrição, em vários tamanhos', () => {

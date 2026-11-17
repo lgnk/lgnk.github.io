@@ -3,7 +3,11 @@ import { cases } from '../../src/data/cases';
 
 describe('cases', () => {
   it('estão na ordem aprovada', () => {
-    expect(cases.map((c) => c.slug)).toEqual(['beerpass', 'avance', 'pedro-porto', 'inkaboxe', 'silver-schuffner', 'jm-atacado']);
+    expect(cases.map((c) => c.slug)).toEqual(['avance', 'pedro-porto', 'inkaboxe', 'silver-schuffner', 'jm-atacado']);
+  });
+
+  it('nada da Beerpass (contrato: divulgar o trabalho exige autorização por escrito)', () => {
+    for (const c of cases) expect(JSON.stringify(c)).not.toMatch(/beerpass|mesmart/i);
   });
 
   it('Inka Boxe se escreve separado', () => {
@@ -22,7 +26,6 @@ describe('cases', () => {
   it('fatos confirmados pelo Ian', () => {
     const by = (slug: string) => cases.find((c) => c.slug === slug)!;
     expect(by('avance').result).toContain('Mais de 6 treinadores e 80 alunos');
-    expect(by('beerpass').built).toContain('Stone e PagBank');
     expect(by('inkaboxe').result).toBe('Reconhece o aluno pelo rosto mesmo sem internet.');
     expect(by('pedro-porto').result).toContain('Mercado Pago e Melhor Envio');
     expect(by('silver-schuffner').result).toBe('Em desenvolvimento.');
