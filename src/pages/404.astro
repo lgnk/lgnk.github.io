@@ -3,6 +3,15 @@ import Base from '../layouts/Base.astro';
 import Mascot from '../components/Mascot.astro';
 ---
 
+<script is:inline>
+  // Sites de cliente que saíram de lgnk.com.br/<pasta>/ para <pasta>.lgnk.com.br.
+  // Mantém o caminho, o ?v= do vendedor e o # do pedido.
+  (function () {
+    var m = location.pathname.match(/^\/(jm-atacado|silver-schuffner)(\/.*)?$/);
+    if (m) location.replace("https://" + m[1] + ".lgnk.com.br" + (m[2] || "/") + location.search + location.hash);
+  })();
+</script>
+
 <Base
   title="Página não encontrada · LGNK Sistemas"
   description="Essa página não existe. Volte para o início do site da LGNK Sistemas."
